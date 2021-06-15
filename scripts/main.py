@@ -1,5 +1,6 @@
 import os
-
+from data_loading import *
+from pre_processing import *
 
 
 
@@ -18,18 +19,33 @@ if __name__ == '__main__':
                                                                                                  test_subject_number))
 
     # choose one subject for the following steps
-    subject_dir = train_dir+'/17/'
+    subject_id = 17
+    subject_dir = train_dir+'/{}/'.format(subject_id)
     video_list = os.listdir(subject_dir)
 
-    video_path = os.path.join(subject_dir,video_list[0])
+    video_id = 1
+
+    video_path = os.path.join(subject_dir,video_list[video_id-1])
     print('current video is from path: {}'.format(video_path))
 
-    # read in videos
+    # load in videos
 
     # videos to frames
+    frame_train_dir = casia_data_folder+'/train_frames/'
+    subject_frame_dir = os.path.join(frame_train_dir,str(subject_id))
+    if os.path.exists(subject_frame_dir) == False:
+        os.mkdir(subject_frame_dir)
 
-    # face detection
+    video_frame_dir = os.path.join(subject_frame_dir,str(video_id))
+    if os.path.exists(video_frame_dir) == False:
+        os.mkdir(video_frame_dir)
 
-    # face alignment
+    extract_frames(video_path,video_frame_dir)
 
-    # face regions extraction
+
+    for each_frame in os.list(video_frame_dir):
+        # face detection
+        pass
+        # face alignment
+
+        # face regions extraction
