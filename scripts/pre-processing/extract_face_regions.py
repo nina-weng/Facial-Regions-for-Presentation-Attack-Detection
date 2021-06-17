@@ -119,7 +119,7 @@ if __name__ == '__main__':
 
     for subjects in os.listdir(normalized_dir):
         # only test subject 17 for now
-        if subjects != '17':
+        if subjects.startswith('1'):
             continue
 
         subject_dir = os.path.join(normalized_dir,subjects)
@@ -132,8 +132,8 @@ if __name__ == '__main__':
 
 
         for video_id in video_list:
-            if video_id != '5': #5
-                continue
+            # if video_id != '5': #5
+            #     continue
 
             video_dir = os.path.join(subject_dir, video_id)
             face_list = os.listdir(video_dir)

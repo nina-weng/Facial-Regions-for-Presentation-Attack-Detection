@@ -7,6 +7,12 @@
 
 ## Dataset
 
+related paper: https://ieeexplore-ieee-org.proxy.findit.dtu.dk/stamp/stamp.jsp?tp=&arnumber=6199754
+
+There are 50 subjects in this dataset. For each subject, there are 12 videos with low, mid, high quality. And it contains 3 kinds of attack: warped photo attack, cut photo attack, and video attack.
+
+
+
 
 
 ## Mission Completion Step-by-step
@@ -41,20 +47,26 @@
    | 3    | Right ear         | (14,15)                                | 75 x 51      |
    | 4    | left eyebrow      | (17-21)                                | 51 x 75      |
    | 5    | right eyebrow     | (22-26)                                | 51 x 75      |
-   | 6    | both eyebrow      | (21,22)                                | 51 x 151     |
-   | 7    | left eye          | (36,41)                                | 51 x 51      |
-   | 8    | right eye         | (42,47)                                | 51 x 51      |
+   | 6    | both eyebrows     | (21,22)                                | 51 x 151     |
+   | 7    | left eye          | (36-41)                                | 51 x 51      |
+   | 8    | right eye         | (42-47)                                | 51 x 51      |
    | 9    | both eyes         | (39,42)                                | 51 x 151     |
    | 10   | Face ISOV         | (30)                                   | 192 x 168    |
    | 11   | Forehead          | (21,22) as bottom center               | 101 x 151    |
    | 12   | Left middle face  | 30 as right center                     | 173 x 106    |
    | 13   | Right middle face | 30 as left center                      | 173 x 106    |
-   | 14   | Mouth             | (48-67)                                | 51 x 101     |
+   | 14   | Mouth             | (61-63,65-67)                          | 51 x 101     |
    | 15   | Nose              | 29                                     | 101 x 75     |
 
    
 
-3. scripts for PAD approach (better not too computational consuming) (6.16 WED and 6.17 THU)
+3. scripts for PAD approach (better not too computational consuming) 
+
+   1. some reference ideas:
+      * [use only a single frame, based on color space histogram](https://github.com/ee09115/spoofing_detection) might not be so suitable for our case
+      * the easiest way: extract features (not sure what features) from frames and than use classifier.
+      * we could start with for example 10 video (or even 5) for training and 5 for testing, to reduce the computational cost for now. (notice the video quality and PA type)
+      * Handbook might has some clues for where to start
 
 4. experiment design 
 

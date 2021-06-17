@@ -104,7 +104,19 @@ def crop_face(face_img,affined_landmarks):
     y = int(eye_center[1] - NORMALIZED_WIDTH*0.6-1)
 
     # print(left_eye_center,right_eye_center,eye_center)
-    crop_img = face_img[y:y + h, x:x + w]
+
+    crop_img = np.zeros([h,w,3]).astype(np.uint8)
+    # if the computed x and y are out of range
+    if x < 0:
+        x_ = 0;w_ = w + x
+    else:
+        x_ = x;w_ = w
+    if y < 0:
+        y_ = 0;h_ = h + y
+    else:
+        y_ = y;h_=h
+
+    crop_img[h-h_:h, w-w_:w,:] = face_img[y_:y_ + h_, x_:x_ + w_,:].copy()
     return crop_img
 
 def face_alignment(img,landmarks):
@@ -125,32 +137,28 @@ def face_alignment(img,landmarks):
     # cv2.imshow("Output", img)
     # cv2.waitKey(0)
     eye_center = ((right_eye_center[0]+left_eye_center[0])*0.5,(right_eye_center[1]+left_eye_center[1])*0.5)
-    print(eye_center)
+    # print(eye_center)
     dx = (right_eye_center[0] - left_eye_center[0])
     dy = (right_eye_center[1] - left_eye_center[1])
     # compute angle
     angle = math.atan2(dy, dx) * 180. / math.pi
-    print(angle)
+    # print(angle)
     pupil_dis = get_pixel_distance(left_eye_center,right_eye_center)
-    print('pupil_dis:{}'.format(pupil_dis))
+    # print('pupil_dis:{}'.format(pupil_dis))
     scale = NORMALIZED_WIDTH*0.25/pupil_dis
-    print('scale:{}'.format(scale))
+    # print('scale:{}'.format(scale))
     RotateMatrix = cv2.getRotationMatrix2D(eye_center, angle, scale=scale)
 
     aligned_face = cv2.warpAffine(img.copy(), RotateMatrix, (int(img.shape[1]),int(img.shape[0])))
 
     landmark_affined =  get_affined_landmarks(landmarks,RotateMatrix)
 
-    for i,(x, y) in enumerate(landmark_affined):
-        cv2.circle(aligned_face, (x, y), 1, (0, 0, 255), -1)
-    cv2.imshow('',aligned_face)
-    cv2.waitKey(0)
+    # for i,(x, y) in enumerate(landmark_affined):
+    #     cv2.circle(aligned_face, (x, y), 1, (0, 0, 255), -1)
+    # cv2.imshow('',aligned_face)
+    # cv2.waitKey(0)
 
     normalized_face = crop_face(aligned_face,landmark_affined)
-
-    cv2.imshow('', normalized_face)
-    cv2.waitKey(0)
-
 
     return normalized_face
 
@@ -214,7 +222,7 @@ if __name__ == '__main__':
     normalized_dir = casia_data_folder+'/train_normalized/'
 
     for subjects in os.listdir(frame_dir):
-        if subjects != '1':
+        if subjects != '2':
             continue
         subject_dir = os.path.join(frame_dir,subjects)
         video_list = os.listdir(subject_dir)
@@ -224,7 +232,7 @@ if __name__ == '__main__':
             os.mkdir(normalized_subject_dir)
 
         for video_id in video_list:
-            if video_id != '2':
+            if video_id != '1':
                 continue
             video_dir = os.path.join(subject_dir,video_id)
             frame_list = os.listdir(video_dir)
