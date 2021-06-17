@@ -1,12 +1,9 @@
 import os
-from data_loading import *
-from pre_processing import *
-
 
 
 
 if __name__ == '__main__':
-
+    """
     casia_data_folder = '..\..\..\Casia-Face-AntiSpoofing'
     print(os.listdir(casia_data_folder))
 
@@ -49,3 +46,5 @@ if __name__ == '__main__':
         # face alignment
 
         # face regions extraction
+    
+"""
