@@ -84,8 +84,8 @@ if __name__ == '__main__':
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
-    train_data = frame_based_CASIA_dataset('..\..\\train_test_info\\train_15_10.txt', 256, transform_train)
-    test_data = frame_based_CASIA_dataset('..\..\\train_test_info\\test_5_10.txt', 256, transform_test)
+    train_data = frame_based_CASIA_dataset('..\..\\train_test_info\\train_15_r1.txt', 256, transform_train)
+    test_data = frame_based_CASIA_dataset('..\..\\train_test_info\\test_5_r1.txt', 256, transform_test)
 
     # load pre-trained resnet18 model
     net = torchvision.models.resnet18(pretrained=True)
@@ -144,6 +144,6 @@ if __name__ == '__main__':
                 correct += (predicted.numpy() == label.numpy()).sum()
                 loss_test = criterion(out, label)
                 total_loss += loss_test.item()
-            print('test accuracy:{}\t loss:{}'.format(total_correct / total,total_loss))
+            print('test accuracy:{}\t loss:{}'.format(correct / total,total_loss))
 
 

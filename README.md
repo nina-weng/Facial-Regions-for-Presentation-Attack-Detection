@@ -72,6 +72,10 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
       2. reduce data size (one from every 10 frames)
       3. only use the train set for pilot trails, 15 subjects for training & 5 for testing
       4. on normalized face & 15 regions respectively 
+   3. updated to-do-list (6.18 night)
+      1. extract frame and face regions for testing set (5 frames each video maybe?)
+      2. run the resnet18 model and see whether it is too good
+      3. whether need other dataset
 
 4. experiment design 
 
