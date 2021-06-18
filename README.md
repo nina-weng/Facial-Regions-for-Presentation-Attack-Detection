@@ -67,6 +67,11 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
       * the easiest way: extract features (not sure what features) from frames and than use classifier.
       * we could start with for example 10 video (or even 5) for training and 5 for testing, to reduce the computational cost for now. (notice the video quality and PA type)
       * Handbook might has some clues for where to start
+   2. possible ideas (steps)
+      1. DL structure: resnet18 
+      2. reduce data size (one from every 10 frames)
+      3. only use the train set for pilot trails, 15 subjects for training & 5 for testing
+      4. on normalized face & 15 regions respectively 
 
 4. experiment design 
 
