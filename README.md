@@ -125,9 +125,9 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
 
 5. #trails01 experiment on 1/2/5 frame each video and compare the result
 
-6. #function03  APCER and BPCER & DET curve (**urgent**) 
+6. #function03 ~~APCER and BPCER~~ & DET curve (**urgent, confused**) 
 
-   {APCER and BPCER - done; DET curve - confused}
+   
 
 ## Might-interesting Ideas
 

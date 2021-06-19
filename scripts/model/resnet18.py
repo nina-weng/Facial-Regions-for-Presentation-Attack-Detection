@@ -20,7 +20,7 @@ parser.add_argument('--test-batch', default=1, type=int,
                     help="test batch size")
 parser.add_argument('--size', default='256', choices=['154','140','256','192','combine'])
 parser.add_argument('--seed', type=int, default=1, help="manual seed")
-parser.add_argument('--num-epochs', type=int, default=20, help="number of epochs")
+parser.add_argument('--num-epochs', type=int, default=10, help="number of epochs")
 parser.add_argument('--lr', '--learning-rate', default=1e-4, type=float,
                     help="initial learning rate, use 0.0001 for rnn, use 0.0003 for pooling and attention")
 args = parser.parse_args()
@@ -84,8 +84,8 @@ if __name__ == '__main__':
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
-    train_data = frame_based_CASIA_dataset('..\..\\train_test_info\\train_beyes_20_1.txt', 256, transform_train)
-    test_data = frame_based_CASIA_dataset('..\..\\train_test_info\\test_beyes_30_1.txt', 256, transform_test)
+    train_data = frame_based_CASIA_dataset('..\..\\train_test_info\\train_faceisov_20_1.txt', 256, transform_train)
+    test_data = frame_based_CASIA_dataset('..\..\\train_test_info\\test_faceisov_30_1.txt', 256, transform_test)
 
     # load pre-trained resnet18 model
     net = torchvision.models.resnet18(pretrained=True)
