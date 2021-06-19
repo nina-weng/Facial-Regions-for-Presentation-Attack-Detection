@@ -96,13 +96,13 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
 
 ## Pilot experiment results
 
-| model    | parameters                                                   | regions/n_face  | accuracy after 3 epochs         |
-| -------- | ------------------------------------------------------------ | --------------- | ------------------------------- |
-| resnet18 | train-batch = 32, test-batch = 1, size = 256, lr = 1e-4, num_frames_perv = 1 | normalized_face | 1e: 0.944; 2e: 0.9916; 3e:0.988 |
-|          |                                                              | both_eyes       |                                 |
-|          |                                                              |                 |                                 |
-|          |                                                              |                 |                                 |
-|          |                                                              |                 |                                 |
+| model    | parameters                                                   | regions/n_face  | accuracy after 3 epochs             |
+| -------- | ------------------------------------------------------------ | --------------- | ----------------------------------- |
+| resnet18 | train-batch = 32, test-batch = 1, size = 256, lr = 1e-4, num_frames_perv = 1 | normalized_face | 1e: 0.944; 2e: 0.9916; 3e:0.988     |
+|          |                                                              | both_eyes       | 1e: 0.5888; 2e: 0.86944; 3e: 0.8916 |
+|          |                                                              | face_ISOV       | 1e: 0.8333; 2e: 0.9388; 3e: 0.9694  |
+|          |                                                              |                 |                                     |
+|          |                                                              |                 |                                     |
 
 
 
