@@ -47,15 +47,17 @@ if __name__ == '__main__':
     frame_dir = casia_data_folder + '/train_frames/'
     train_normalized_dir = casia_data_folder + '/train_normalized/'
     test_normalized_dir = casia_data_folder + '/test_normalized/'
-    region_dir = casia_data_folder+'/train_face_region/both_eyes/'
+    region_chosen = 'face_ISOV'
+    train_region_dir = casia_data_folder+'/train_face_region/'+ region_chosen
+    test_region_dir = casia_data_folder + '/test_face_region/'+ region_chosen
 
     # temporarily we use the first 15 subjects in train set as training data, the last 5 subjects as testing data
-    train_set_dirs =[os.path.join(train_normalized_dir,dir_) for dir_ in os.listdir(train_normalized_dir)]
-    test_set_dirs = [os.path.join(test_normalized_dir,dir_) for dir_ in os.listdir(test_normalized_dir)]
+    train_set_dirs =[os.path.join(train_region_dir,dir_) for dir_ in os.listdir(train_region_dir)]
+    test_set_dirs = [os.path.join(test_region_dir,dir_) for dir_ in os.listdir(test_region_dir)]
 
     txt_dir = '..\..\\train_test_info'
-    train_txt_fname = 'train_nface_20_1.txt'
-    test_txt_fname='test_nface_30_1.txt'
+    train_txt_fname = 'train_faceisov_20_1.txt'
+    test_txt_fname='test_faceisov_30_1.txt'
 
     get_imgpath_label_txt(train_set_dirs,os.path.join(txt_dir,train_txt_fname),num_frames=1)
     get_imgpath_label_txt(test_set_dirs,os.path.join(txt_dir,test_txt_fname),num_frames=1)
