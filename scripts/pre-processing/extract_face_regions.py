@@ -99,14 +99,14 @@ if __name__ == '__main__':
 
     casia_data_folder = '..\..\..\..\Casia-Face-AntiSpoofing'
     frame_dir = casia_data_folder + '/train_frames/'
-    normalized_dir = casia_data_folder + '/train_normalized/'
+    normalized_dir = casia_data_folder + '/test_normalized/'
 
     detector = dlib.get_frontal_face_detector()
     predictor_path = '..\..\pretrained_model\shape_predictor_81_face_landmarks.dat'
     predictor = dlib.shape_predictor(predictor_path)
 
     # store path
-    face_regions_dir =  casia_data_folder + '/train_face_region/'
+    face_regions_dir =  casia_data_folder + '/test_face_region/'
     if os.path.exists(face_regions_dir) == False:
         os.mkdir(face_regions_dir)
 
@@ -118,9 +118,6 @@ if __name__ == '__main__':
 
 
     for subjects in os.listdir(normalized_dir):
-        # only test subject 17 for now
-        if subjects.startswith('1'):
-            continue
 
         subject_dir = os.path.join(normalized_dir,subjects)
         video_list = os.listdir(subject_dir)
@@ -132,8 +129,6 @@ if __name__ == '__main__':
 
 
         for video_id in video_list:
-            # if video_id != '5': #5
-            #     continue
 
             video_dir = os.path.join(subject_dir, video_id)
             face_list = os.listdir(video_dir)

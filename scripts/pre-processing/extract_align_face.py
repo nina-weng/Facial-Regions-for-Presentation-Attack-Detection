@@ -116,7 +116,33 @@ def crop_face(face_img,affined_landmarks):
     else:
         y_ = y;h_=h
 
-    crop_img[h-h_:h, w-w_:w,:] = face_img[y_:y_ + h_, x_:x_ + w_,:].copy()
+    c_y1 = h-h_
+    c_x1 = w-w_
+    c_y2 = h
+    c_x2= w
+
+    n_y1 = y_
+    n_x1 = x_
+    n_y2 = y_+ h_
+    n_x2 = x_ + w_
+
+    # print(x,y,h,w)
+    # print(x_,y_,h_,w_)
+    # print(h-h_,h,w-w_,w)
+    # print(y_,y_+h_,x_,x_+w_)
+    # print(face_img.shape)
+
+    if n_y2 > face_img.shape[0]:
+        diff = n_y2-face_img.shape[0]
+        c_y2 -= diff
+        n_y2 = face_img.shape[0]
+    if n_x2 > face_img.shape[1]:
+        diff = n_x2- face_img.shape[1]
+        c_x2 -= diff
+        n_x2 = face_img.shape[1]
+
+    crop_img[c_y1:c_y2, c_x1:c_x2,:] = face_img[n_y1:n_y2, n_x1:n_x2,:].copy()
+    # print('cropped done')
     return crop_img
 
 def face_alignment(img,landmarks):
@@ -217,13 +243,11 @@ if __name__ == '__main__':
     predictor_path = '..\..\pretrained_model\shape_predictor_81_face_landmarks.dat'
     predictor = dlib.shape_predictor(predictor_path)
 
-    frame_dir = casia_data_folder+'/train_frames/'
+    frame_dir = casia_data_folder+'/test_frames/'
 
-    normalized_dir = casia_data_folder+'/train_normalized/'
+    normalized_dir = casia_data_folder+'/test_normalized/'
 
     for subjects in os.listdir(frame_dir):
-        if subjects != '2':
-            continue
         subject_dir = os.path.join(frame_dir,subjects)
         video_list = os.listdir(subject_dir)
 
@@ -232,8 +256,6 @@ if __name__ == '__main__':
             os.mkdir(normalized_subject_dir)
 
         for video_id in video_list:
-            if video_id != '1':
-                continue
             video_dir = os.path.join(subject_dir,video_id)
             frame_list = os.listdir(video_dir)
 

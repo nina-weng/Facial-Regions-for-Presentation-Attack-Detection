@@ -84,8 +84,8 @@ if __name__ == '__main__':
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
-    train_data = frame_based_CASIA_dataset('..\..\\train_test_info\\train_15_r1.txt', 256, transform_train)
-    test_data = frame_based_CASIA_dataset('..\..\\train_test_info\\test_5_r1.txt', 256, transform_test)
+    train_data = frame_based_CASIA_dataset('..\..\\train_test_info\\train_nface_20_3.txt', 256, transform_train)
+    test_data = frame_based_CASIA_dataset('..\..\\train_test_info\\test_nface_30_3.txt', 256, transform_test)
 
     # load pre-trained resnet18 model
     net = torchvision.models.resnet18(pretrained=True)
