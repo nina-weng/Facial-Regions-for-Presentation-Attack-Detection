@@ -20,7 +20,7 @@ parser.add_argument('--test-batch', default=1, type=int,
                     help="test batch size")
 parser.add_argument('--size', default='256', choices=['154','140','256','192','combine'])
 parser.add_argument('--seed', type=int, default=1, help="manual seed")
-parser.add_argument('--num-epochs', type=int, default=3, help="number of epochs")
+parser.add_argument('--num-epochs', type=int, default=20, help="number of epochs")
 parser.add_argument('--lr', '--learning-rate', default=1e-4, type=float,
                     help="initial learning rate, use 0.0001 for rnn, use 0.0003 for pooling and attention")
 args = parser.parse_args()
@@ -84,8 +84,8 @@ if __name__ == '__main__':
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
-    train_data = frame_based_CASIA_dataset('..\..\\train_test_info\\train_faceisov_20_1.txt', 256, transform_train)
-    test_data = frame_based_CASIA_dataset('..\..\\train_test_info\\test_faceisov_30_1.txt', 256, transform_test)
+    train_data = frame_based_CASIA_dataset('..\..\\train_test_info\\train_beyes_20_1.txt', 256, transform_train)
+    test_data = frame_based_CASIA_dataset('..\..\\train_test_info\\test_beyes_30_1.txt', 256, transform_test)
 
     # load pre-trained resnet18 model
     net = torchvision.models.resnet18(pretrained=True)
@@ -135,6 +135,11 @@ if __name__ == '__main__':
             total = 0
             total_loss = 0
             correct = 0
+
+            apce = 0
+            bpce = 0
+            ap_total = 0
+            bp_total = 0
             for id, item in tqdm(enumerate(dataloader_test)):
                 data, label = item
                 out = net(data)
@@ -144,6 +149,14 @@ if __name__ == '__main__':
                 correct += (predicted.numpy() == label.numpy()).sum()
                 loss_test = criterion(out, label)
                 total_loss += loss_test.item()
-            print('test accuracy:{}\t loss:{}'.format(correct / total,total_loss))
+
+                ap_total += (label.numpy() == 1).sum()
+                bp_total += (label.numpy() == 0).sum()
+                if predicted.numpy() == 0 and label.numpy() == 1:
+                    apce+=1
+                elif predicted.numpy() == 1 and label.numpy() == 0:
+                    bpce += 1
+            print('epoch:{}\ttest accuracy:{}\t loss:{}'.format(epoch,correct / total,total_loss))
+            print('APCER:{:.4f}\tBPCER:{:.4f}'.format(apce/ap_total,bpce/bp_total))
 
 

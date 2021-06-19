@@ -73,9 +73,9 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
       3. only use the train set for pilot trails, 15 subjects for training & 5 for testing
       4. on normalized face & 15 regions respectively 
    3. updated to-do-list (6.18 night)
-      1. extract frame and face regions for testing set (5 frames each video maybe?)
-      2. run the resnet18 model and see whether it is too good
-      3. whether need other dataset
+      1. extract frame and face regions for testing set (5 frames each video maybe?) (done)
+      2. run the resnet18 model and see whether it is too good (done)
+      3. whether need other dataset (ask for that via email)
 
 4. experiment design 
 
@@ -104,9 +104,30 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
 |          |                                                              |                 |                                     |
 |          |                                                              |                 |                                     |
 
+*possible problems: the regions and the normalized faces might not from the same frame (-> #bug05)
 
 
 
+## Update to-do-list (some neeeeed-implemented ideas)
+
+1. #function01 visualization the layers (CAM, class activation mapping), might be interesting
+
+2. #bug05 regions imgs &  normalized imgs might not come from the same frame (caz we take them randomly from the folder) 
+
+   possible dealing ways: 
+
+   * get the all txt files at one time
+   * random seed
+
+3. #issue05 overqualified performance with deep learning 
+
+4. #function02 fusion on face regions (feature-fusion, add one more fc layer)
+
+5. #trails01 experiment on 1/2/5 frame each video and compare the result
+
+6. #function03  APCER and BPCER & DET curve (**urgent**) 
+
+   {APCER and BPCER - done; DET curve - confused}
 
 ## Might-interesting Ideas
 
