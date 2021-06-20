@@ -127,12 +127,12 @@ APCER:0.0111	BPCER:0.1111
 
 1. #function01 visualization the layers (CAM, class activation mapping), might be interesting
 
-2. #bug05 regions imgs &  normalized imgs might not come from the same frame (caz we take them randomly from the folder) 
+2. #bug05 (fixed) ~~regions imgs &  normalized imgs might not come from the same frame (caz we take them randomly from the folder)~~
 
-   possible dealing ways: 
+   ~~possible dealing ways:~~
 
-   * get the all txt files at one time
-   * random seed
+   * ~~get the all txt files at one time~~
+   * ~~random seed~~
 
 3. #issue05 overqualified performance with deep learning 
 
