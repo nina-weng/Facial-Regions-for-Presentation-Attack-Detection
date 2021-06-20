@@ -9,7 +9,9 @@ import torch.optim as optim
 import argparse
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-
+from sklearn.utils.extmath import softmax
+from datetime import datetime
+import numpy as np
 
 
 
@@ -23,6 +25,10 @@ parser.add_argument('--seed', type=int, default=1, help="manual seed")
 parser.add_argument('--num-epochs', type=int, default=10, help="number of epochs")
 parser.add_argument('--lr', '--learning-rate', default=1e-4, type=float,
                     help="initial learning rate, use 0.0001 for rnn, use 0.0003 for pooling and attention")
+parser.add_argument('--rec-dir', default='../../results/scores_rec/', type=str,
+                    help="score recording file path dir")
+parser.add_argument('--face-region', default='faceisov', type=str,
+                    help="chosen face region")
 args = parser.parse_args()
 
 
@@ -84,8 +90,19 @@ if __name__ == '__main__':
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
-    train_data = frame_based_CASIA_dataset('..\..\\train_test_info\\train_faceisov_20_1.txt', 256, transform_train)
-    test_data = frame_based_CASIA_dataset('..\..\\train_test_info\\test_faceisov_30_1.txt', 256, transform_test)
+    train_text_path = '..\..\\train_test_info\\train_' + args.face_region + '_20_1.txt'
+    test_text_path = '..\..\\train_test_info\\test_' + args.face_region + '_30_1.txt'
+
+    train_data = frame_based_CASIA_dataset(train_text_path, 256, transform_train)
+    test_data = frame_based_CASIA_dataset(test_text_path, 256, transform_test)
+
+    # record file path
+    rec_fpath = args.rec_dir + '/' + args.face_region + '_' + datetime.now().strftime('%Y%m%d%H%M%S') + '.txt'
+    f = open(rec_fpath, "a")
+    f.write('ARGS:{}\n'.format(args))
+    f.close()
+
+
 
     # load pre-trained resnet18 model
     net = torchvision.models.resnet18(pretrained=True)
@@ -140,6 +157,8 @@ if __name__ == '__main__':
             bpce = 0
             ap_total = 0
             bp_total = 0
+
+            props = []
             for id, item in tqdm(enumerate(dataloader_test)):
                 data, label = item
                 out = net(data)
@@ -156,7 +175,22 @@ if __name__ == '__main__':
                     apce+=1
                 elif predicted.numpy() == 1 and label.numpy() == 0:
                     bpce += 1
+
+                # props_ = softmax(out)
+                props.append(softmax(out))
+
             print('epoch:{}\ttest accuracy:{}\t loss:{}'.format(epoch,correct / total,total_loss))
             print('APCER:{:.4f}\tBPCER:{:.4f}'.format(apce/ap_total,bpce/bp_total))
+
+            props_ = np.array(props)
+            resize_props_ = props_.reshape((-1,2))
+
+            f = open(rec_fpath, "a")
+            f.write('\nepoch:{}\n'.format(epoch))
+            for i in range(resize_props_.shape[0]):
+                f.write('{},{}\n'.format(resize_props_[i,0],resize_props_[i,1]))
+            f.close()
+
+
 
 

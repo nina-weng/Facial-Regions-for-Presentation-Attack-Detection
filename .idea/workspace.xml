@@ -2,7 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a45b1a66-5e02-4ea6-98a9-cb2c4b5b9322" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/model/resnet18.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/model/resnet18.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/pre-processing/train_test_list_generation.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/pre-processing/train_test_list_generation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/test_5_10.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/test_5_20.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/test_5_r1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/test_beyes_30_1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/test_nface_30_1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/test_nface_30_3.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/test_nface_30_5.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/train_15_10.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/train_15_20.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/train_15_r1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/train_beyes_20_1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/train_nface_20_1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/train_nface_20_3.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/train_test_info/train_nface_20_5.txt" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,9 +31,9 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/Facial_Regions_for_Presentation_Attack_Detection$extract_frames.coverage" NAME="extract_frames Coverage Results" MODIFIED="1624091949582" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts/pre-processing" />
     <SUITE FILE_PATH="coverage/Facial_Regions_for_Presentation_Attack_Detection$extract_face_regions.coverage" NAME="extract_face_regions Coverage Results" MODIFIED="1624107766300" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts/pre-processing" />
-    <SUITE FILE_PATH="coverage/Facial_Regions_for_Presentation_Attack_Detection$resnet18.coverage" NAME="resnet18 Coverage Results" MODIFIED="1624143684745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts/model" />
+    <SUITE FILE_PATH="coverage/Facial_Regions_for_Presentation_Attack_Detection$resnet18.coverage" NAME="resnet18 Coverage Results" MODIFIED="1624230046670" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts/model" />
     <SUITE FILE_PATH="coverage/Facial_Regions_for_Presentation_Attack_Detection$main.coverage" NAME="main Coverage Results" MODIFIED="1623797097822" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/Facial_Regions_for_Presentation_Attack_Detection$train_test_list_generation.coverage" NAME="train_test_list_generation Coverage Results" MODIFIED="1624110097539" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts/pre-processing" />
+    <SUITE FILE_PATH="coverage/Facial_Regions_for_Presentation_Attack_Detection$train_test_list_generation.coverage" NAME="train_test_list_generation Coverage Results" MODIFIED="1624230414720" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts/pre-processing" />
     <SUITE FILE_PATH="coverage/Facial_Regions_for_Presentation_Attack_Detection$extract_align_face.coverage" NAME="extract_align_face Coverage Results" MODIFIED="1624107017619" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts/pre-processing" />
   </component>
   <component name="DatabaseView">
@@ -35,47 +52,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="extract_frames.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/pre-processing/extract_frames.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="37" column="55" selection-start-line="37" selection-start-column="22" selection-end-line="37" selection-end-column="30" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="extract_align_face.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/pre-processing/extract_align_face.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4392">
-              <caret line="250" column="54" selection-start-line="250" selection-start-column="54" selection-end-line="250" selection-end-column="54" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="extract_face_regions.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/pre-processing/extract_face_regions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2268">
-              <caret line="130" column="35" selection-start-line="130" selection-start-column="35" selection-end-line="130" selection-end-column="35" />
-              <folding>
-                <element signature="e#0#11#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="train_test_list_generation.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="train_test_list_generation.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/scripts/pre-processing/train_test_list_generation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="828">
-              <caret line="48" column="60" selection-start-line="48" selection-start-column="60" selection-end-line="48" selection-end-column="60" />
+            <state relative-caret-position="113">
+              <caret line="60" column="18" lean-forward="true" selection-start-line="60" selection-start-column="18" selection-end-line="60" selection-end-column="18" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -83,11 +64,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="resnet18.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="resnet18.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripts/model/resnet18.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="129">
-              <caret line="84" column="6" lean-forward="true" selection-start-line="84" selection-start-column="6" selection-end-line="84" selection-end-column="6" />
+            <state relative-caret-position="160">
+              <caret line="181" column="66" selection-start-line="181" selection-start-column="66" selection-end-line="181" selection-end-column="66" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -123,8 +104,8 @@
         <option value="$PROJECT_DIR$/scripts/pre-processing/extract_frames.py" />
         <option value="$PROJECT_DIR$/scripts/pre-processing/extract_face_regions.py" />
         <option value="$PROJECT_DIR$/scripts/pre-processing/extract_align_face.py" />
-        <option value="$PROJECT_DIR$/scripts/pre-processing/train_test_list_generation.py" />
         <option value="$PROJECT_DIR$/scripts/model/resnet18.py" />
+        <option value="$PROJECT_DIR$/scripts/pre-processing/train_test_list_generation.py" />
       </list>
     </option>
   </component>
@@ -152,6 +133,17 @@
             <path>
               <item name="Facial-Regions-for-Presentation-Attack-Detection" type="b2602c69:ProjectViewProjectNode" />
               <item name="Facial-Regions-for-Presentation-Attack-Detection" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Facial-Regions-for-Presentation-Attack-Detection" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Facial-Regions-for-Presentation-Attack-Detection" type="462c0819:PsiDirectoryNode" />
+              <item name="results" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Facial-Regions-for-Presentation-Attack-Detection" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Facial-Regions-for-Presentation-Attack-Detection" type="462c0819:PsiDirectoryNode" />
+              <item name="results" type="462c0819:PsiDirectoryNode" />
+              <item name="scores_rec" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Facial-Regions-for-Presentation-Attack-Detection" type="b2602c69:ProjectViewProjectNode" />
@@ -195,7 +187,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.resnet18">
+  <component name="RunManager" selected="Python.train_test_list_generation">
     <configuration name="extract_align_face" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Facial-Regions-for-Presentation-Attack-Detection" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -300,8 +292,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.resnet18" />
         <item itemvalue="Python.train_test_list_generation" />
+        <item itemvalue="Python.resnet18" />
         <item itemvalue="Python.extract_face_regions" />
         <item itemvalue="Python.extract_align_face" />
         <item itemvalue="Python.extract_frames" />
@@ -330,12 +322,13 @@
       <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Python Console" order="10" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.4935806" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3366619" />
       <window_info anchor="bottom" id="Terminal" order="11" />
       <window_info anchor="right" id="Remote Host" order="4" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14075068" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19906166" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" visible="true" weight="0.17627347" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32952926" />
       <window_info anchor="right" id="SciView" order="5" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -346,7 +339,6 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32952926" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -378,11 +370,26 @@
           <line>109</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/scripts/pre-processing/train_test_list_generation.py</url>
+          <line>25</line>
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="29" />
+      <option name="time" value="32" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/scripts/model/resnet18.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1512">
+          <caret line="84" column="6" lean-forward="true" selection-start-line="84" selection-start-column="6" selection-end-line="84" selection-end-column="6" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/pre-processing/extract_frames.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
@@ -668,22 +675,74 @@
         <state relative-caret-position="-1512" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/pre-processing/train_test_list_generation.py">
+    <entry file="file://$PROJECT_DIR$/results/scores_rec/faceisov_20210620234859.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/results/scores_rec/faceisov_20210620235557.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/results/scores_rec/faceisov_20210621000225.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_test_info/train_chosen_id.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_test_info/normalized_30_1.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_test_info/test_chosen_id.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/model/resnet18.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="828">
-          <caret line="48" column="60" selection-start-line="48" selection-start-column="60" selection-end-line="48" selection-end-column="60" />
+        <state relative-caret-position="160">
+          <caret line="181" column="66" selection-start-line="181" selection-start-column="66" selection-end-line="181" selection-end-column="66" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#12#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/scripts/model/resnet18.py">
+    <entry file="file://$PROJECT_DIR$/results/scores_rec/faceisov_20210621002205.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="84" column="6" lean-forward="true" selection-start-line="84" selection-start-column="6" selection-end-line="84" selection-end-column="6" />
+        <state relative-caret-position="51174">
+          <caret line="2843" column="43" lean-forward="true" selection-start-line="2843" selection-start-column="43" selection-end-line="2843" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_test_info/normalized_20_1.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_test_info/face_ISOV_20_1.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_test_info/face_ISOV_30_1.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_test_info/test_both_eyebrows_30_1.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5927" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_test_info/test_face_ISOV_30_1.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-12393" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train_test_info/train_both_eyebrows_20_1.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/results/scores_rec/faceisov_20210621010049.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5400" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/pre-processing/train_test_list_generation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113">
+          <caret line="60" column="18" lean-forward="true" selection-start-line="60" selection-start-column="18" selection-end-line="60" selection-end-column="18" />
           <folding>
-            <element signature="e#0#12#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>

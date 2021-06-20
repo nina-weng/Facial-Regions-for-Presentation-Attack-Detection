@@ -96,15 +96,30 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
 
 ## Pilot experiment results
 
-| model    | parameters                                                   | regions/n_face  | accuracy after 3 epochs             |
-| -------- | ------------------------------------------------------------ | --------------- | ----------------------------------- |
-| resnet18 | train-batch = 32, test-batch = 1, size = 256, lr = 1e-4, num_frames_perv = 1 | normalized_face | 1e: 0.944; 2e: 0.9916; 3e:0.988     |
-|          |                                                              | both_eyes       | 1e: 0.5888; 2e: 0.86944; 3e: 0.8916 |
-|          |                                                              | face_ISOV       | 1e: 0.8333; 2e: 0.9388; 3e: 0.9694  |
-|          |                                                              |                 |                                     |
-|          |                                                              |                 |                                     |
+| model    | parameters                                                   | regions/n_face  | accuracy after 3 epochs             | APCER      | BPCER      |
+| -------- | ------------------------------------------------------------ | --------------- | ----------------------------------- | ---------- | ---------- |
+| resnet18 | train-batch = 32, test-batch = 1, size = 256, lr = 1e-4, num_frames_perv = 1 | normalized_face | 1e: 0.944; 2e: 0.9916; 3e:0.988     |            |            |
+|          |                                                              | both_eyes       | 1e: 0.5888; 2e: 0.86944; 3e: 0.8916 |            |            |
+|          |                                                              | face_ISOV*      | 1e: 0.8333; 2e: 0.9388; 3e: 0.9694  | 1e: 0.0222 | 1e: 0.2778 |
+|          |                                                              |                 |                                     |            |            |
+|          |                                                              |                 |                                     |            |            |
 
-*possible problems: the regions and the normalized faces might not from the same frame (-> #bug05)
+*epoch:0	test accuracy:0.9138888888888889	 loss:124.99356327205896
+APCER:0.0222	BPCER:0.2778
+
+epoch:1	test accuracy:0.9527777777777777	 loss:72.55839783430565
+APCER:0.0407	BPCER:0.0667
+
+epoch:2	test accuracy:0.925	 loss:72.72640012131524
+APCER:0.0852	BPCER:0.0444
+
+epoch:3	test accuracy:0.975	 loss:37.66810244815133
+APCER:0.0111	BPCER:0.0667
+
+epoch:4	test accuracy:0.9638888888888889	 loss:38.4113368919061
+APCER:0.0111	BPCER:0.1111
+
+**possible problems**: the regions and the normalized faces might not from the same frame (-> #bug05)
 
 
 
@@ -126,6 +141,18 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
 5. #trails01 experiment on 1/2/5 frame each video and compare the result
 
 6. #function03 ~~APCER and BPCER~~ & DET curve (**urgent, confused**) 
+
+   about how to get the DET curve:
+
+   first of all you need a PAD score. In previous studies, 
+
+   * whether they use SVM
+   * or weird designed score (not suitable in our case)
+   * use softmax result but not plot DET only ROC
+
+   concerns about using softmax result: not smooth enough (centralized in 0.1 and 0.9)
+
+7. #other01 deploy the experiment in DTU clusters
 
    
 
