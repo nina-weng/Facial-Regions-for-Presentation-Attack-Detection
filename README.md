@@ -152,7 +152,7 @@ APCER:0.0111	BPCER:0.1111
 
    concerns about using softmax result: not smooth enough (centralized in 0.1 and 0.9)
 
-7. #other01 deploy the experiment in DTU clusters
+7. #other01 ~~deploy the experiment in DTU clusters~~
 
    
 

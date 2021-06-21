@@ -54,7 +54,7 @@ def get_list_from_chosen_id(chosenid_fpath,f_dir,region_type,txt_path):
                 line= line[:-1]
             contents = line.split(',')
             subject_id,video_id,img_id,label = contents[0],contents[1],contents[2],int(contents[3])
-            img_new_path = os.path.join(f_dir,subject_id,video_id,'{}{}.jpg'.format(region_type,img_id))
+            img_new_path = '{}/{}/{}/{}{}.jpg'.format(f_dir,subject_id,video_id,region_type,img_id)
             info.append('{},{}\n'.format(img_new_path,label))
 
     f_txt = open(txt_path,'a')
@@ -69,12 +69,12 @@ def get_list_from_chosen_id(chosenid_fpath,f_dir,region_type,txt_path):
 if __name__ == '__main__':
 
     # casia_data_folder = '..\..\..\..\Casia-Face-AntiSpoofing'
-    casia_data_folder = 'D:\\NinaWeng\\DTU\\learning\\02238_biometric\\RPA\\Casia-Face-AntiSpoofing\\'
+    casia_data_folder = '../../../../Casia-Face-AntiSpoofing'
     frame_dir = casia_data_folder + '/train_frames/'
-    train_normalized_dir = casia_data_folder + '/train_normalized/'
-    test_normalized_dir = casia_data_folder + '/test_normalized/'
+    train_normalized_dir = casia_data_folder + '/train_normalized'
+    test_normalized_dir = casia_data_folder + '/test_normalized'
 
-    txt_dir = '..\..\\train_test_info'
+    txt_dir = '../../train_test_info'
     train_chosenid_fname = 'train_chosen_id.txt'
     test_chosenid_fname = 'test_chosen_id.txt'
 
@@ -107,6 +107,21 @@ if __name__ == '__main__':
 
         get_list_from_chosen_id(train_chosenid_path,train_region_dir,region_chosen,train_txt_path)
         get_list_from_chosen_id(test_chosenid_path, test_region_dir, region_chosen, test_txt_path)
+
+#     region_chosen = 'normalized'
+#     train_region_dir = casia_data_folder + '/train_face_region/' + region_chosen
+#     test_region_dir = casia_data_folder + '/test_face_region/' + region_chosen
+# #
+#
+#     train_txt_fname = 'train_{}_20_1.txt'.format(region_chosen)
+#     test_txt_fname = 'test_{}_30_1.txt'.format(region_chosen)
+#
+#     train_txt_path = os.path.join(txt_dir, train_txt_fname)
+#     test_txt_path = os.path.join(txt_dir, test_txt_fname)
+#
+#
+#     get_list_from_chosen_id(train_chosenid_path, train_normalized_dir, region_chosen, train_txt_path)
+#     get_list_from_chosen_id(test_chosenid_path, test_normalized_dir, region_chosen, test_txt_path)
 
 
 

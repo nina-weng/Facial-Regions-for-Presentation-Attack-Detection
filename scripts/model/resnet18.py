@@ -12,6 +12,8 @@ from tqdm import tqdm
 from sklearn.utils.extmath import softmax
 from datetime import datetime
 import numpy as np
+import torch.backends.cudnn as cudnn
+import os
 
 
 
@@ -27,8 +29,9 @@ parser.add_argument('--lr', '--learning-rate', default=1e-4, type=float,
                     help="initial learning rate, use 0.0001 for rnn, use 0.0003 for pooling and attention")
 parser.add_argument('--rec-dir', default='../../results/scores_rec/', type=str,
                     help="score recording file path dir")
-parser.add_argument('--face-region', default='faceisov', type=str,
+parser.add_argument('--face-region', default='normalized', type=str,
                     help="chosen face region")
+parser.add_argument('--gpu-devices', default='0', type=str, help='gpu device ids for CUDA_VISIBLE_DEVICES')
 args = parser.parse_args()
 
 
@@ -61,13 +64,14 @@ class frame_based_CASIA_dataset(Dataset):
 
 
 if __name__ == '__main__':
-    # use_gpu = torch.cuda.is_available()
-    # if use_gpu:
-    #     print("Currently using GPU {}".format(args.gpu_devices))
-    #     cudnn.benchmark = True
-    #     #torch.cuda.manual_seed_all(args.seed)
-    # else:
-    #     print("Currently using CPU (GPU is highly recommended)")
+    os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
+    use_gpu = torch.cuda.is_available()
+    if use_gpu:
+        print("Currently using GPU {}".format(args.gpu_devices))
+        cudnn.benchmark = True
+        #torch.cuda.manual_seed_all(args.seed)
+    else:
+        print("Currently using CPU (GPU is highly recommended)")
 
     transform_train = transforms.Compose([
         # transforms.CenterCrop(512)
@@ -105,8 +109,15 @@ if __name__ == '__main__':
 
 
     # load pre-trained resnet18 model
-    net = torchvision.models.resnet18(pretrained=True)
-    net.fc = nn.Linear(512,2,bias=True)
+    if use_gpu:
+        net = torchvision.models.resnet18(pretrained=True).cuda()
+        # modify the last layer
+        net.fc = nn.Linear(512, 2, bias=True).cuda()
+    else:
+        net = torchvision.models.resnet18(pretrained=True)
+        net.fc = nn.Linear(512, 2, bias=True)
+
+
 
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), lr=args.lr)
@@ -127,10 +138,15 @@ if __name__ == '__main__':
         print('number of batch:{}'.format(len(dataloader_train)))
         for id, item in tqdm(enumerate(dataloader_train)):
             data, label = item
+
+            if use_gpu:
+                data = data.cuda()
+                label = label.cuda()
+
             out = net(data)
             _, predicted = torch.max(out, 1)
             loss = criterion(out, label)
-            correct = (predicted.numpy() == label.numpy()).sum()
+            correct = (predicted.cpu().numpy() == label.cpu().numpy()).sum()
             total_correct += correct
             total_loss = total_loss + loss.item()
             total += label.size(0)
@@ -159,25 +175,33 @@ if __name__ == '__main__':
             bp_total = 0
 
             props = []
+            labels_rec = []
+
             for id, item in tqdm(enumerate(dataloader_test)):
                 data, label = item
+
+                if use_gpu:
+                    data = data.cuda()
+                    label = label.cuda()
+
                 out = net(data)
 
                 _, predicted = torch.max(out, 1)
                 total += label.size(0)
-                correct += (predicted.numpy() == label.numpy()).sum()
+                correct += (predicted.cpu().numpy() == label.cpu().numpy()).sum()
                 loss_test = criterion(out, label)
                 total_loss += loss_test.item()
 
-                ap_total += (label.numpy() == 1).sum()
-                bp_total += (label.numpy() == 0).sum()
-                if predicted.numpy() == 0 and label.numpy() == 1:
+                ap_total += (label.cpu().numpy() == 1).sum()
+                bp_total += (label.cpu().numpy() == 0).sum()
+                if predicted.cpu().numpy() == 0 and label.cpu().numpy() == 1:
                     apce+=1
-                elif predicted.numpy() == 1 and label.numpy() == 0:
+                elif predicted.cpu().numpy() == 1 and label.cpu().numpy() == 0:
                     bpce += 1
 
                 # props_ = softmax(out)
-                props.append(softmax(out))
+                props.append(softmax(out.cpu()))
+                labels_rec.append(label.cpu().numpy())
 
             print('epoch:{}\ttest accuracy:{}\t loss:{}'.format(epoch,correct / total,total_loss))
             print('APCER:{:.4f}\tBPCER:{:.4f}'.format(apce/ap_total,bpce/bp_total))
@@ -188,7 +212,7 @@ if __name__ == '__main__':
             f = open(rec_fpath, "a")
             f.write('\nepoch:{}\n'.format(epoch))
             for i in range(resize_props_.shape[0]):
-                f.write('{},{}\n'.format(resize_props_[i,0],resize_props_[i,1]))
+                f.write('{},{},{}\n'.format(resize_props_[i,0],resize_props_[i,1],labels_rec[i]))
             f.close()
 
 
