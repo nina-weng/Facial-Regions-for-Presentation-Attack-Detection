@@ -104,23 +104,6 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
 |          |                                                              |                 |                                     |            |            |
 |          |                                                              |                 |                                     |            |            |
 
-*epoch:0	test accuracy:0.9138888888888889	 loss:124.99356327205896
-APCER:0.0222	BPCER:0.2778
-
-epoch:1	test accuracy:0.9527777777777777	 loss:72.55839783430565
-APCER:0.0407	BPCER:0.0667
-
-epoch:2	test accuracy:0.925	 loss:72.72640012131524
-APCER:0.0852	BPCER:0.0444
-
-epoch:3	test accuracy:0.975	 loss:37.66810244815133
-APCER:0.0111	BPCER:0.0667
-
-epoch:4	test accuracy:0.9638888888888889	 loss:38.4113368919061
-APCER:0.0111	BPCER:0.1111
-
-**possible problems**: the regions and the normalized faces might not from the same frame (-> #bug05)
-
 
 
 ## Update to-do-list (some neeeeed-implemented ideas)
@@ -140,7 +123,7 @@ APCER:0.0111	BPCER:0.1111
 
 5. #trails01 experiment on 1/2/5 frame each video and compare the result
 
-6. #function03 ~~APCER and BPCER~~ & DET curve (**urgent, confused**) 
+6. #function03 ~~APCER and BPCER~~ & ~~DET curve (**urgent, confused**)~~
 
    about how to get the DET curve:
 
@@ -152,7 +135,13 @@ APCER:0.0111	BPCER:0.1111
 
    concerns about using softmax result: not smooth enough (centralized in 0.1 and 0.9)
 
+   **Done**: using the softmax result as score. DET plots over different face region:
+
+   ![img](./results/plots/face_regions_det.png)
+
 7. #other01 ~~deploy the experiment in DTU clusters~~
+
+8. #trails02 other datasets
 
    
 
