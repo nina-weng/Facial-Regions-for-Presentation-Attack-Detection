@@ -197,6 +197,8 @@ if __name__ == '__main__':
 
             print('id:%d loss:%f correct:%.2f total correct perc:%.3f' % (id, loss.item(),correct/args.train_batch, total_correct / total))
         print("total loss:%f" % (total_loss))
+        train_accu = total_correct / total
+        train_loss = total_loss
 
         # test
         with torch.no_grad():
@@ -250,6 +252,10 @@ if __name__ == '__main__':
             f.write('\nepoch:{}\n'.format(epoch))
             for i in range(resize_props_.shape[0]):
                 f.write('{},{},{}\n'.format(resize_props_[i,0],resize_props_[i,1],labels_rec[i]))
+            # record the train loss & test loss
+            f.write('train accuracy:{:.6ff}\ttrain loss:{:.6f}\n'.format(train_accu,train_loss))
+            f.write('test accuracy:{:.6f}\ttest loss:{:.6f}\n'.format(correct / total,total_loss))
+            f.write('APCER:{:.4f}\tBPCER:{:.4f}\n'.format(apce/ap_total,bpce/bp_total))
             f.close()
 
 

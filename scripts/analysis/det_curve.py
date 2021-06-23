@@ -32,17 +32,21 @@ def read_tar_non(txt_fpath):
 
 
 if __name__ == '__main__':
-    scores_rec_dir = '../../results/scores_rec/'
+    scores_rec_dir = '../../results/scores_rec/single_region'
 
     face_regions=[]
     tars = []
     nons = []
 
     for fname in os.listdir(scores_rec_dir):
-        face_regions.append(fname.split('_2021')[0])
-        tar,non = read_tar_non(os.path.join(scores_rec_dir,fname))
-        tars.append(tar)
-        nons.append(non)
+        # print(fname.split('202106')[1])
+        if fname.split('202106')[1][:2] == '23':
+            face_regions.append(fname.split('_2021')[0])
+            tar,non = read_tar_non(os.path.join(scores_rec_dir,fname))
+            tars.append(tar)
+            nons.append(non)
+
+    print('includes {} region result'.format(len(face_regions)))
 
     det = DET(biometric_evaluation_type='PAD', plot_title='APCER-BPCER', abbreviate_axes=True, plot_eer_line=True)
 

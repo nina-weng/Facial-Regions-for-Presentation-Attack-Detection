@@ -121,7 +121,15 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
 
 4. #function02 fusion on face regions (feature-fusion, add one more fc layer)
 
+   basically done
+
+   need experiments (face_isov+right_mid_face -> accuracy 0.98+)
+
 5. #trails01 experiment on 1/2/5 frame each video and compare the result
+
+   could be observed that the performance is much better and stable compare with the num_of_frame = 1
+
+   ![](./results/plots/face_regions_det_numf5.png)
 
 6. #function03 ~~APCER and BPCER~~ & ~~DET curve (**urgent, confused**)~~
 
@@ -137,13 +145,17 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
 
    **Done**: using the softmax result as score. DET plots over different face region:
 
-   ![img](./results/plots/face_regions_det.png)
+   ![img](./results/plots/face_regions_det_numf1.png)
 
 7. #other01 ~~deploy the experiment in DTU clusters~~
 
-8. #trails02 other datasets
+8. #trails02 other datasets 
 
-   
+   face alignment & region extraction has done, training needs to be done
+
+9. #function04 need to get EER (with certain number) and make a chart
+
+
 
 ## Might-interesting Ideas
 

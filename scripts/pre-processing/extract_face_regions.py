@@ -97,16 +97,24 @@ def landmark_detection(img):
 
 if __name__ == '__main__':
 
-    casia_data_folder = '..\..\..\..\Casia-Face-AntiSpoofing'
-    frame_dir = casia_data_folder + '/train_frames/'
-    normalized_dir = casia_data_folder + '/test_normalized/'
+    dataset_type = 'replay-mobile'
+
+    if dataset_type == 'Casia':
+        dataset_folder = '..\..\..\..\Casia-Face-AntiSpoofing'
+    elif dataset_type == 'replay-mobile':
+        dataset_folder = '..\..\..\..\RM'
+    else:
+        raise Exception('dataset type not implemented')
+
+
+    normalized_dir = dataset_folder + '/train_normalized/'
 
     detector = dlib.get_frontal_face_detector()
     predictor_path = '..\..\pretrained_model\shape_predictor_81_face_landmarks.dat'
     predictor = dlib.shape_predictor(predictor_path)
 
     # store path
-    face_regions_dir =  casia_data_folder + '/test_face_region/'
+    face_regions_dir =  dataset_folder + '/train_face_region/'
     if os.path.exists(face_regions_dir) == False:
         os.mkdir(face_regions_dir)
 
@@ -116,42 +124,72 @@ if __name__ == '__main__':
         if os.path.exists(region_dir) == False:
             os.mkdir(region_dir)
 
+    if dataset_type == 'Casia':
+        for subjects in os.listdir(normalized_dir):
 
-    for subjects in os.listdir(normalized_dir):
-
-        subject_dir = os.path.join(normalized_dir,subjects)
-        video_list = os.listdir(subject_dir)
-
-        for region_type_chosen in FACE_REGIONS_INFO.keys():
-            region_subject_dir = os.path.join(face_regions_dir, region_type_chosen, subjects)
-            if os.path.exists(region_subject_dir) == False:
-                os.mkdir(region_subject_dir)
-
-
-        for video_id in video_list:
-
-            video_dir = os.path.join(subject_dir, video_id)
-            face_list = os.listdir(video_dir)
+            subject_dir = os.path.join(normalized_dir,subjects)
+            video_list = os.listdir(subject_dir)
 
             for region_type_chosen in FACE_REGIONS_INFO.keys():
-                region_subject_video_dir = os.path.join(face_regions_dir, region_type_chosen, subjects, video_id)
-                if os.path.exists(region_subject_video_dir) == False:
-                    os.mkdir(region_subject_video_dir)
+                region_subject_dir = os.path.join(face_regions_dir, region_type_chosen, subjects)
+                if os.path.exists(region_subject_dir) == False:
+                    os.mkdir(region_subject_dir)
 
-            print('processing frames from:{}'.format(video_dir))
-            for face_fname in tqdm(face_list):
-                face_path = os.path.join(video_dir, face_fname)
 
-                frame_id = face_fname.split('.jpg')[0].split('normalized')[1]
+            for video_id in video_list:
+
+                video_dir = os.path.join(subject_dir, video_id)
+                face_list = os.listdir(video_dir)
+
+                for region_type_chosen in FACE_REGIONS_INFO.keys():
+                    region_subject_video_dir = os.path.join(face_regions_dir, region_type_chosen, subjects, video_id)
+                    if os.path.exists(region_subject_video_dir) == False:
+                        os.mkdir(region_subject_video_dir)
+
+                print('processing frames from:{}'.format(video_dir))
+                for face_fname in tqdm(face_list):
+                    face_path = os.path.join(video_dir, face_fname)
+
+                    frame_id = face_fname.split('.jpg')[0].split('normalized')[1]
+
+                    img = cv2.imread(face_path)
+                    isDetected, landmarks = landmark_detection(img)
+
+                    if isDetected:
+                        for region_type_chosen in FACE_REGIONS_INFO.keys():
+                            # region_type_chosen = 'chin'
+                            region_subject_video_dir = os.path.join(face_regions_dir,region_type_chosen,subjects,video_id)
+                            region_img = extract_region(region_type_chosen,img,landmarks)
+                            cv2.imwrite(region_subject_video_dir + "/{}{}.jpg".format(region_type_chosen,frame_id), region_img)
+
+    elif dataset_type == 'replay-mobile':
+        for ap_bp_types in os.listdir(normalized_dir):
+            ap_bp_types_dir = os.path.join(normalized_dir, ap_bp_types)
+            img_list = os.listdir(ap_bp_types_dir)
+
+            for region_type_chosen in FACE_REGIONS_INFO.keys():
+                region_abtype_dir = os.path.join(face_regions_dir, region_type_chosen, ap_bp_types)
+                if os.path.exists(region_abtype_dir) == False:
+                    os.mkdir(region_abtype_dir)
+
+            print('processing frames from:{}'.format(ap_bp_types_dir))
+            for face_fname in tqdm(img_list):
+                face_path = os.path.join(ap_bp_types_dir, face_fname)
+
+                img_info = face_fname.split('.jpg')[0].split('normalized_')[1]
 
                 img = cv2.imread(face_path)
                 isDetected, landmarks = landmark_detection(img)
 
                 if isDetected:
                     for region_type_chosen in FACE_REGIONS_INFO.keys():
-                        # region_type_chosen = 'chin'
-                        region_subject_video_dir = os.path.join(face_regions_dir,region_type_chosen,subjects,video_id)
-                        region_img = extract_region(region_type_chosen,img,landmarks)
-                        cv2.imwrite(region_subject_video_dir + "/{}{}.jpg".format(region_type_chosen,frame_id), region_img)
+                        region_subject_video_dir = os.path.join(face_regions_dir, region_type_chosen,ap_bp_types)
+                        region_img = extract_region(region_type_chosen, img, landmarks)
+                        # cv2.imshow('',region_img)
+                        # cv2.waitKey()
+                        write_path = os.path.join(region_subject_video_dir,"{}_{}.jpg".format(region_type_chosen, img_info))
+                        # print(write_path)
+                        cv2.imwrite(os.path.join(region_subject_video_dir,"{}_{}.jpg".format(region_type_chosen, img_info)),
+                                    region_img)
 
 

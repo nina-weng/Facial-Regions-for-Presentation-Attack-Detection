@@ -234,47 +234,85 @@ def landmark_detection(img):
     return True,landmarks
 
 if __name__ == '__main__':
-    # try
 
-    casia_data_folder = '..\..\..\..\Casia-Face-AntiSpoofing'
+    # dataset: Casia, replay-mobile
+
+    dataset_type = 'replay-mobile'
+
+    if dataset_type == 'Casia':
+        dataset_folder = '..\..\..\..\Casia-Face-AntiSpoofing'
+    elif dataset_type == 'replay-mobile':
+        dataset_folder = '..\..\..\..\REPLAY-MOBILE-Frame-Subset'
+    else:
+        raise Exception('dataset type not implemented')
 
     # detector = MTCNN()
     detector = dlib.get_frontal_face_detector()
     predictor_path = '..\..\pretrained_model\shape_predictor_81_face_landmarks.dat'
     predictor = dlib.shape_predictor(predictor_path)
 
-    frame_dir = casia_data_folder+'/test_frames/'
+    if dataset_type == 'Casia':
+        frame_dir = dataset_folder+'/train_frames/'
+    elif dataset_type == 'replay-mobile':
+        frame_dir = dataset_folder +'/train/'
+    else:
+        raise Exception('dataset type not implemented')
 
-    normalized_dir = casia_data_folder+'/test_normalized/'
+    normalized_dir = dataset_folder+'/train_normalized/'
+    if os.path.exists(normalized_dir) == False:
+        os.mkdir(normalized_dir)
 
-    for subjects in os.listdir(frame_dir):
-        subject_dir = os.path.join(frame_dir,subjects)
-        video_list = os.listdir(subject_dir)
+    if dataset_type == 'Casia':
+        for subjects in os.listdir(frame_dir):
+            subject_dir = os.path.join(frame_dir,subjects)
+            video_list = os.listdir(subject_dir)
 
-        normalized_subject_dir = os.path.join(normalized_dir,subjects)
-        if os.path.exists(normalized_subject_dir)== False:
-            os.mkdir(normalized_subject_dir)
+            normalized_subject_dir = os.path.join(normalized_dir,subjects)
+            if os.path.exists(normalized_subject_dir)== False:
+                os.mkdir(normalized_subject_dir)
 
-        for video_id in video_list:
-            video_dir = os.path.join(subject_dir,video_id)
-            frame_list = os.listdir(video_dir)
+            for video_id in video_list:
+                video_dir = os.path.join(subject_dir,video_id)
+                frame_list = os.listdir(video_dir)
 
-            normalized_video_dir = os.path.join(normalized_subject_dir, video_id)
-            if os.path.exists(normalized_video_dir) == False:
-                os.mkdir(normalized_video_dir)
+                normalized_video_dir = os.path.join(normalized_subject_dir, video_id)
+                if os.path.exists(normalized_video_dir) == False:
+                    os.mkdir(normalized_video_dir)
 
-            print('processing frames from:{}'.format(video_dir))
-            for frame_name in tqdm(frame_list):
-                frame_path = os.path.join(video_dir,frame_name)
-                img = cv2.imread(frame_path)
+                print('processing frames from:{}'.format(video_dir))
+                for frame_name in tqdm(frame_list):
+                    frame_path = os.path.join(video_dir,frame_name)
+                    img = cv2.imread(frame_path)
+                    # print(img.shape)
+
+                    isDetected,landmarks = landmark_detection(img)
+                    if isDetected:
+                        normolized_face = face_alignment(img,landmarks)
+
+                        frame_id = frame_name.split('.jpg')[0].split('frame')[1]
+
+                        cv2.imwrite(normalized_video_dir + "/normalized{}.jpg".format(frame_id), normolized_face)
+
+    elif dataset_type == 'replay-mobile':
+        for ap_bp_types in os.listdir(frame_dir):
+            ap_bp_types_dir = os.path.join(frame_dir, ap_bp_types)
+            img_list = os.listdir(ap_bp_types_dir)
+
+            normalized_ap_bp_types_dir = os.path.join(normalized_dir, ap_bp_types)
+            if os.path.exists(normalized_ap_bp_types_dir) == False:
+                os.mkdir(normalized_ap_bp_types_dir)
+
+            print('processing frames from:{}'.format(ap_bp_types_dir))
+            for img_name in tqdm(img_list):
+                img_path = os.path.join(ap_bp_types_dir, img_name)
+                img = cv2.imread(img_path)
                 # print(img.shape)
 
-                isDetected,landmarks = landmark_detection(img)
+                isDetected, landmarks = landmark_detection(img)
                 if isDetected:
-                    normolized_face = face_alignment(img,landmarks)
+                    normolized_face = face_alignment(img, landmarks)
 
-                    frame_id = frame_name.split('.jpg')[0].split('frame')[1]
+                    img_id = img_name.split('.bmp')[0]
 
-                    cv2.imwrite(normalized_video_dir + "/normalized{}.jpg".format(frame_id), normolized_face)
-
+                    cv2.imwrite(normalized_ap_bp_types_dir + "/normalized_{}.jpg".format(img_id), normolized_face)
 
