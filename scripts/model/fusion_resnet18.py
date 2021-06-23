@@ -15,10 +15,9 @@ import numpy as np
 import torch.backends.cudnn as cudnn
 import os
 
-
-
-parser = argparse.ArgumentParser(description='train resnet18 model with frame-based CASIA PAD')
-parser.add_argument('--train-batch', default=32, type=int,
+parser = argparse.ArgumentParser(description='Training with feature-level-fusion resnet18. \
+Dataset frame-based Casia-Face-AntiSpoofing PAD.')
+parser.add_argument('--train-batch', default=4, type=int,
                     help="train batch size")
 parser.add_argument('--test-batch', default=1, type=int,
                     help="test batch size")
@@ -27,49 +26,85 @@ parser.add_argument('--seed', type=int, default=1, help="manual seed")
 parser.add_argument('--num-epochs', type=int, default=10, help="number of epochs")
 parser.add_argument('--lr', '--learning-rate', default=1e-4, type=float,
                     help="initial learning rate, use 0.0001 for rnn, use 0.0003 for pooling and attention")
-parser.add_argument('--rec-dir', default='../../results/scores_rec/single_region', type=str,
+parser.add_argument('--rec-dir', default='../../results/scores_rec/region_fusion', type=str,
                     help="score recording file path dir")
-parser.add_argument('--face-region', default='normalized', type=str,
-                    help="chosen face region")
+parser.add_argument('--face-regions', default='[forehead,face_ISOV]', type=str,
+                    help="list-like string, the list of face regions")
 parser.add_argument('--gpu-devices', default='0', type=str, help='gpu device ids for CUDA_VISIBLE_DEVICES')
 args = parser.parse_args()
 
 
-class frame_based_CASIA_dataset(Dataset):
+
+# feature level fusion resnet18
+class FLF_resnet18(nn.Module):
+    def __init__(self, sub_net_num=2):
+        super(FLF_resnet18, self).__init__()
+        self.sub_net_num = sub_net_num
+        net_list = []
+        for i in range(self.sub_net_num):
+            net_this =torchvision.models.resnet18(pretrained=True)
+            net_list.append(net_this)
+        self.net_list = nn.ModuleList(net_list)
+        self.bn = nn.BatchNorm1d(self.sub_net_num*1000)
+        self.fc = nn.Linear(self.sub_net_num*1000,2)
+
+    def forward(self, x):
+        assert(self.sub_net_num == x.shape[1])
+        feature_list=[]
+        for i in range(self.sub_net_num):
+            feature_list.append(self.net_list[i](x[:,i]))
+        feature=torch.cat(feature_list,1)
+        out =self.bn(feature)
+        out = self.fc(out)
+        return out
+
+
+
+class frame_based_CASIA_dataset_fusion(Dataset):
     """docstring for data"""
-    def __init__(self, txt_path, size='256', transform=None):
-        fh = open(txt_path, 'r')
-        imgs = []
-        for line in fh:
-            line = line.rstrip()
-            contents = line.split(',')
-            imgs.append((contents[0], int(contents[1])))
-        self.imgs = imgs
+    def __init__(self, txt_path_list, size='256', transform=None):
+        imgs_collection = []
+        for txt_path in txt_path_list:
+            fh = open(txt_path, 'r')
+            imgs = []
+            for line in fh:
+                line = line.rstrip()
+                contents = line.split(',')
+                imgs.append((contents[0], int(contents[1])))
+            imgs_collection.append(imgs)
+        self.imgs_collection = imgs_collection
         self.transform = transform
         self.size = size
 
     def __getitem__(self, index):
-        fn, label = self.imgs[index]
-        img = cv2.imread(fn)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img = Image.fromarray(img)
-        if self.transform is not None:
-            img = self.transform(img)
-        # img = img.unsqueeze(0)
+        imgs_fr = []
+        for i in range(len(self.imgs_collection)):
+            fn, label = self.imgs_collection[i][index]
 
-        return img,label
+            img = cv2.imread(fn)
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            img = Image.fromarray(img)
+            if self.transform is not None:
+                img = self.transform(img)
+            imgs_fr.append(img)
+
+        imgs_fr = torch.stack(imgs_fr)
+
+        return imgs_fr,label
 
     def __len__(self):
-        return len(self.imgs)
+        return len(self.imgs_collection[0])
 
 
 if __name__ == '__main__':
+    print('Training with feature-level-fusion resnet18')
+
     os.environ['CUDA_VISIBLE_DEVICES'] = args.gpu_devices
     use_gpu = torch.cuda.is_available()
     if use_gpu:
         print("Currently using GPU {}".format(args.gpu_devices))
         cudnn.benchmark = True
-        #torch.cuda.manual_seed_all(args.seed)
+        # torch.cuda.manual_seed_all(args.seed)
     else:
         print("Currently using CPU (GPU is highly recommended)")
 
@@ -86,38 +121,38 @@ if __name__ == '__main__':
     ])
 
     transform_test = transforms.Compose([
-            #transforms.CenterCrop(512)
-            #transforms.RandomResizedCrop(512),
-            #transforms.ColorJitter(brightness=20,contrast=0.2,saturation=20,hue=0.1),
-            transforms.Resize((256, 256)),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+        # transforms.CenterCrop(512)
+        # transforms.RandomResizedCrop(512),
+        # transforms.ColorJitter(brightness=20,contrast=0.2,saturation=20,hue=0.1),
+        transforms.Resize((256, 256)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
-    train_text_path = '..\..\\train_test_info\\train_' + args.face_region + '_20_1.txt'
-    test_text_path = '..\..\\train_test_info\\test_' + args.face_region + '_30_1.txt'
 
-    train_data = frame_based_CASIA_dataset(train_text_path, 256, transform_train)
-    test_data = frame_based_CASIA_dataset(test_text_path, 256, transform_test)
+    chosen_face_regions = args.face_regions[1:-1].split(',')
+    print('Chosen face regions:{}'.format(chosen_face_regions))
+    num_of_fusion_regions = len(chosen_face_regions)
+
+    train_txt_list = [ '../../train_test_info/numf5/train_' + fr + '_20_1.txt' for fr in chosen_face_regions]
+    test_txt_list = [ '../../train_test_info/numf5/test_' + fr + '_30_1.txt' for fr in chosen_face_regions]
+
+    train_data = frame_based_CASIA_dataset_fusion(train_txt_list, 256, transform_train)
+    test_data = frame_based_CASIA_dataset_fusion(test_txt_list, 256, transform_test)
 
     # record file path
-    rec_fpath = args.rec_dir + '/' + args.face_region + '_' + datetime.now().strftime('%Y%m%d%H%M%S') + '.txt'
+    rec_fpath = args.rec_dir + '/' +'fusion_'+ '_'.join(chosen_face_regions) + '_' + datetime.now().strftime('%Y%m%d%H%M%S') + '.txt'
     f = open(rec_fpath, "a")
     f.write('ARGS:{}\n'.format(args))
     f.close()
 
+    print('ARGS:{}\n'.format(args))
 
-
-    # load pre-trained resnet18 model
+    # net load
     if use_gpu:
-        net = torchvision.models.resnet18(pretrained=True).cuda()
-        # modify the last layer
-        net.fc = nn.Linear(512, 2, bias=True).cuda()
+        net = FLF_resnet18(sub_net_num=num_of_fusion_regions).cuda()
     else:
-        net = torchvision.models.resnet18(pretrained=True)
-        net.fc = nn.Linear(512, 2, bias=True)
-
-
+        net = FLF_resnet18(sub_net_num=num_of_fusion_regions)
 
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(net.parameters(), lr=args.lr)
@@ -143,6 +178,7 @@ if __name__ == '__main__':
                 data = data.cuda()
                 label = label.cuda()
 
+            # print(data.shape)
             out = net(data)
             _, predicted = torch.max(out, 1)
             loss = criterion(out, label)
@@ -184,6 +220,7 @@ if __name__ == '__main__':
                     data = data.cuda()
                     label = label.cuda()
 
+
                 out = net(data)
 
                 _, predicted = torch.max(out, 1)
@@ -214,7 +251,5 @@ if __name__ == '__main__':
             for i in range(resize_props_.shape[0]):
                 f.write('{},{},{}\n'.format(resize_props_[i,0],resize_props_[i,1],labels_rec[i]))
             f.close()
-
-
 
 

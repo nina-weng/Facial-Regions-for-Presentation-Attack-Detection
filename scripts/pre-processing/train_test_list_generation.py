@@ -66,7 +66,7 @@ def get_list_from_chosen_id(chosenid_fpath,f_dir,region_type,txt_path):
 
 
 
-if __name__ == '__main__':
+def get_list_from_chosen_id_for_all_regions():
 
     # casia_data_folder = '..\..\..\..\Casia-Face-AntiSpoofing'
     casia_data_folder = '../../../../Casia-Face-AntiSpoofing'
@@ -74,26 +74,21 @@ if __name__ == '__main__':
     train_normalized_dir = casia_data_folder + '/train_normalized'
     test_normalized_dir = casia_data_folder + '/test_normalized'
 
-    txt_dir = '../../train_test_info'
-    train_chosenid_fname = 'train_chosen_id.txt'
-    test_chosenid_fname = 'test_chosen_id.txt'
+    txt_dir = '../../train_test_info/numf5'
+    train_chosenid_fname = 'train_chosen_id_numf5.txt'
+    test_chosenid_fname = 'test_chosen_id_numf5.txt'
 
     train_chosenid_path = os.path.join(txt_dir, train_chosenid_fname)
     test_chosenid_path = os.path.join(txt_dir, test_chosenid_fname)
 
 
-    face_region_dir = casia_data_folder+'/train_face_region/'
+    face_region_dir = casia_data_folder+'/train_face_region_numf5/'
 
     for f_region in os.listdir(face_region_dir):
 
         region_chosen = f_region
-        train_region_dir = casia_data_folder+'/train_face_region/'+ region_chosen
+        train_region_dir = casia_data_folder+'/train_face_region_numf5/'+ region_chosen
         test_region_dir = casia_data_folder + '/test_face_region/'+ region_chosen
-
-        # # temporarily we use the first 15 subjects in train set as training data, the last 5 subjects as testing data
-        # train_set_dirs =[os.path.join(train_normalized_dir,dir_) for dir_ in os.listdir(train_normalized_dir)]
-        # test_set_dirs = [os.path.join(test_normalized_dir,dir_) for dir_ in os.listdir(test_normalized_dir)]
-        #
 
 
         train_txt_fname = 'train_{}_20_1.txt'.format(region_chosen)
@@ -101,9 +96,6 @@ if __name__ == '__main__':
 
         train_txt_path = os.path.join(txt_dir, train_txt_fname)
         test_txt_path = os.path.join(txt_dir, test_txt_fname)
-
-        # get_imgpath_label_txt(train_set_dirs,os.path.join(txt_dir,train_txt_fname),num_frames=1)
-        # get_imgpath_label_txt(test_set_dirs,os.path.join(txt_dir,test_txt_fname),num_frames=1)
 
         get_list_from_chosen_id(train_chosenid_path,train_region_dir,region_chosen,train_txt_path)
         get_list_from_chosen_id(test_chosenid_path, test_region_dir, region_chosen, test_txt_path)
@@ -125,3 +117,28 @@ if __name__ == '__main__':
 
 
 
+
+
+
+if __name__ == '__main__':
+    get_list_from_chosen_id_for_all_regions()
+
+
+    #####################################################################
+    # code for generate chosen_id with certain number of frames         #
+    #####################################################################
+    # casia_data_folder = '../../../../Casia-Face-AntiSpoofing'
+    #
+    # train_normalized_dir = casia_data_folder + '/train_normalized'
+    # test_normalized_dir = casia_data_folder + '/test_normalized'
+    #
+    # txt_dir = '../../train_test_info/numf5'
+    # train_chosenid_fname = 'train_chosen_id_numf5.txt'
+    # test_chosenid_fname = 'test_chosen_id_numf5.txt'
+    #
+    # train_dirs = [train_normalized_dir+'/'+subject_id for subject_id in os.listdir(train_normalized_dir)]
+    # test_dirs = [test_normalized_dir+'/'+subject_id for subject_id in os.listdir(test_normalized_dir)]
+    #
+    # # get the chosen_id list with the number of frame as x
+    # get_imgpath_label_txt(train_dirs, os.path.join(txt_dir,train_chosenid_fname), num_frames=5)
+    # get_imgpath_label_txt(test_dirs, os.path.join(txt_dir, test_chosenid_fname), num_frames=5)

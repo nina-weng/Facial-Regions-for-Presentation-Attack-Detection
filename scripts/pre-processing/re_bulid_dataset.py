@@ -7,10 +7,14 @@ import shutil
 from tqdm import tqdm
 
 if __name__ == '__main__':
-    source_dir = '../../../../Casia-Face-AntiSpoofing/train_face_region'
-    target_dir = '../../../../Casia-Face-AntiSpoofing/train_face_region_2'
+    # source_dir = '../../../../Casia-Face-AntiSpoofing/train_face_region'
+    source_dir = '../../../../Casia-Face-AntiSpoofing/train_normalized'
+    # target_dir = '../../../../Casia-Face-AntiSpoofing/train_face_region_2'
+    target_dir = '../../../../Casia-Face-AntiSpoofing/train_normalized_numf5'
 
-    chosen_id_txt_fpath = '../../train_test_info/train_chosen_id.txt'
+    chosen_id_txt_fpath = '../../train_test_info/numf5/train_chosen_id_numf5.txt'
+
+    rec_id = 0
 
     with open(chosen_id_txt_fpath,'r') as f:
         for line in tqdm(f):
@@ -19,8 +23,13 @@ if __name__ == '__main__':
             contents = line.split(',')
             subject_id,video_id,img_id,label = contents[0],contents[1],contents[2],int(contents[3])
 
+            j= 0
             for face_regions in os.listdir(source_dir):
+                # for normalized
+                # if j != 0:
+                #     continue
 
+                # face_regions = 'normalized'
                 source_fr_dir = os.path.join(source_dir,face_regions)
                 target_fr_dir = os.path.join(target_dir,face_regions)
 
@@ -42,4 +51,10 @@ if __name__ == '__main__':
                 source_img_path = os.path.join(source_video_dir,'{}{}.jpg'.format(face_regions,img_id))
                 target_img_path =os.path.join(target_video_dir,'{}{}.jpg'.format(face_regions,img_id))
 
-                shutil.copyfile(source_img_path, target_img_path)
+
+                if os.path.exists(source_img_path) ==False:
+                    print('{},{}'.format(rec_id,source_img_path))
+                    rec_id+=1
+                else:
+                    shutil.copyfile(source_img_path, target_img_path)
+
