@@ -71,7 +71,7 @@ def get_eer(fmr, fnmr):
     return (fnmr[t2] + fmr[t2]) / 2
 
 
-def choose_epoch(str_list,criteria='train_loss'):
+def choose_epoch(str_list,criteria='test_loss'):
     num_epoch_exam = len(str_list[2:])
     print('number of epochs need exam:{}'.format(num_epoch_exam))
 
@@ -104,6 +104,8 @@ def choose_epoch(str_list,criteria='train_loss'):
 
     if criteria == 'train_loss':
         best_epoch = np.argmin(train_loss)
+    elif criteria == 'test_loss':
+        best_epoch = np.argmin(test_loss)
     else:
         raise Exception('criteria {} not implemented'.format(criteria))
 
@@ -151,7 +153,7 @@ def read_tar_non(txt_fpath,file_type='single'):
 
 if __name__ == '__main__':
     file_type = 'fusion'
-    NUM_RF = None
+    NUM_RF = 3
 
 
     if file_type == 'single':
