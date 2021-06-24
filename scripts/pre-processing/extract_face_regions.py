@@ -107,14 +107,14 @@ if __name__ == '__main__':
         raise Exception('dataset type not implemented')
 
 
-    normalized_dir = dataset_folder + '/train_normalized/'
+    normalized_dir = dataset_folder + '/test_normalized/'
 
     detector = dlib.get_frontal_face_detector()
     predictor_path = '..\..\pretrained_model\shape_predictor_81_face_landmarks.dat'
     predictor = dlib.shape_predictor(predictor_path)
 
     # store path
-    face_regions_dir =  dataset_folder + '/train_face_region/'
+    face_regions_dir =  dataset_folder + '/test_face_region/'
     if os.path.exists(face_regions_dir) == False:
         os.mkdir(face_regions_dir)
 

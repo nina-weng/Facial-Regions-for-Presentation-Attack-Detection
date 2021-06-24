@@ -180,6 +180,7 @@ if __name__ == '__main__':
                     if NUM_RF != num_fr:
                         continue
 
+            print('*****************\nprocessing {}'.format(fname))
             face_regions.append(fr_name)
             tar,non = read_tar_non(os.path.join(scores_rec_dir,fname),file_type=file_type)
             tars.append(tar)

@@ -27,11 +27,12 @@ parser.add_argument('--seed', type=int, default=1, help="manual seed")
 parser.add_argument('--num-epochs', type=int, default=10, help="number of epochs")
 parser.add_argument('--lr', '--learning-rate', default=1e-4, type=float,
                     help="initial learning rate, use 0.0001 for rnn, use 0.0003 for pooling and attention")
-parser.add_argument('--rec-dir', default='../../results/scores_rec/single_region', type=str,
+parser.add_argument('--rec-dir', default='../../results/scores_rec/rm', type=str,
                     help="score recording file path dir")
 parser.add_argument('--face-region', default='normalized', type=str,
                     help="chosen face region")
 parser.add_argument('--gpu-devices', default='0', type=str, help='gpu device ids for CUDA_VISIBLE_DEVICES')
+parser.add_argument('--data-source',default='rm',choices=['numf1','numf5','rm'],help='the source of data, txt file belonged folder')
 args = parser.parse_args()
 
 
@@ -94,8 +95,8 @@ if __name__ == '__main__':
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
     ])
 
-    train_text_path = '..\..\\train_test_info\\train_' + args.face_region + '_20_1.txt'
-    test_text_path = '..\..\\train_test_info\\test_' + args.face_region + '_30_1.txt'
+    train_text_path = '../../train_test_info/'+args.data_source+'/train_' + args.face_region + '_20_1.txt'
+    test_text_path = '../../train_test_info/'+args.data_source+'/test_' + args.face_region + '_30_1.txt'
 
     train_data = frame_based_CASIA_dataset(train_text_path, 256, transform_train)
     test_data = frame_based_CASIA_dataset(test_text_path, 256, transform_test)

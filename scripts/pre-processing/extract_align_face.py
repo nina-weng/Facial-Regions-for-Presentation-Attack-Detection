@@ -242,7 +242,7 @@ if __name__ == '__main__':
     if dataset_type == 'Casia':
         dataset_folder = '..\..\..\..\Casia-Face-AntiSpoofing'
     elif dataset_type == 'replay-mobile':
-        dataset_folder = '..\..\..\..\REPLAY-MOBILE-Frame-Subset'
+        dataset_folder = '..\..\..\..\RM'
     else:
         raise Exception('dataset type not implemented')
 
@@ -252,13 +252,13 @@ if __name__ == '__main__':
     predictor = dlib.shape_predictor(predictor_path)
 
     if dataset_type == 'Casia':
-        frame_dir = dataset_folder+'/train_frames/'
+        frame_dir = dataset_folder+'/test_frames/'
     elif dataset_type == 'replay-mobile':
-        frame_dir = dataset_folder +'/train/'
+        frame_dir = dataset_folder +'/test/'
     else:
         raise Exception('dataset type not implemented')
 
-    normalized_dir = dataset_folder+'/train_normalized/'
+    normalized_dir = dataset_folder+'/test_normalized/'
     if os.path.exists(normalized_dir) == False:
         os.mkdir(normalized_dir)
 
