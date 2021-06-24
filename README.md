@@ -91,21 +91,6 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
 
 
 
-
-
-
-## Pilot experiment results
-
-| model    | parameters                                                   | regions/n_face  | accuracy after 3 epochs             | APCER      | BPCER      |
-| -------- | ------------------------------------------------------------ | --------------- | ----------------------------------- | ---------- | ---------- |
-| resnet18 | train-batch = 32, test-batch = 1, size = 256, lr = 1e-4, num_frames_perv = 1 | normalized_face | 1e: 0.944; 2e: 0.9916; 3e:0.988     |            |            |
-|          |                                                              | both_eyes       | 1e: 0.5888; 2e: 0.86944; 3e: 0.8916 |            |            |
-|          |                                                              | face_ISOV*      | 1e: 0.8333; 2e: 0.9388; 3e: 0.9694  | 1e: 0.0222 | 1e: 0.2778 |
-|          |                                                              |                 |                                     |            |            |
-|          |                                                              |                 |                                     |            |            |
-
-
-
 ## Update to-do-list (some neeeeed-implemented ideas)
 
 1. #function01 visualization the layers (CAM, class activation mapping), might be interesting
@@ -119,19 +104,89 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
 
 3. #issue05 overqualified performance with deep learning 
 
-4. #function02 fusion on face regions (feature-fusion, add one more fc layer)
+4. #function02 **ONGOING** fusion on face regions (feature-fusion, add one more fc layer)
 
    basically done
 
    need experiments (face_isov+right_mid_face -> accuracy 0.98+)
 
-5. #trails01 experiment on 1/2/5 frame each video and compare the result
+   #enhancement now we can choose the best epoch for DET curve based on ('train_loss')
+
+   ![](./results/plots/fusion2_face_regions_det_numf5.png)
+
+   | domain region | added region      | EER (%)  | accu_test |
+   | ------------- | ----------------- | -------- | --------- |
+   | face_ISOV     | -                 | 2.65     | -         |
+   |               | both_eyebrows     | 2.87     | 0.9713    |
+   |               | both_eyes         | 3.25     | 0.9657    |
+   |               | chin              | **1.75** | 0.9781    |
+   |               | left_ear          | 3.47     | 0.9674    |
+   |               | left_eyebrow      | 3.32     | 0.9680    |
+   |               | left_eye          | 3.55     | 0.9192    |
+   |               | left_middle_face  | 3.32     | 0.9556    |
+   |               | nose              | **1.68** | 0.9848    |
+   |               | right_ear         | 4.44     | 0.9495    |
+   |               | right_eyebrow     | 3.55     | 0.9635    |
+   |               | right_eye         | 2.58     | 0.9764    |
+   |               | right_middle_face | 2.87     | 0.9764    |
+   |               | forehead          | 2.8      | 0.9702    |
+   |               | mouth             | 3.06     | 0.9669    |
+
+   [face_ISOV,nose] + 3rd region:
+
+   | domain regions   | added region      | EER(%)   | accu_test |
+   | ---------------- | ----------------- | -------- | --------- |
+   | [face_ISOV,nose] | -                 | **1.68** | 0.9848    |
+   |                  | both_eyebrows     |          |           |
+   |                  | both_eyes         |          |           |
+   |                  | chin              |          |           |
+   |                  | forehead          |          |           |
+   |                  | left_ear          |          |           |
+   |                  | left_eyebrow      |          |           |
+   |                  | left_eye          |          |           |
+   |                  | left_middle_face  |          |           |
+   |                  | mouth             |          |           |
+   |                  | right_ear         |          |           |
+   |                  | right_eyebrow     |          |           |
+   |                  | right_eye         |          |           |
+   |                  | right_middle_face |          |           |
+   |                  |                   |          |           |
+
+   
+
+5. #trails01  **DONE** ~~experiment on 1/2/5 frame each video and compare the result~~
 
    could be observed that the performance is much better and stable compare with the num_of_frame = 1
 
+   **Below is the result with num_of_frame = 5 for each video clip**
+
+   normalized is not shown caz the EER is 0.00
+
    ![](./results/plots/face_regions_det_numf5.png)
 
-6. #function03 ~~APCER and BPCER~~ & ~~DET curve (**urgent, confused**)~~
+   | num_of_frame=5 | face region       | EER (%)  |
+   | -------------- | :---------------- | -------- |
+   |                | both_eyebrows     | 9.15     |
+   |                | both_eyes         | 8.03     |
+   |                | chin              | 8.92     |
+   |                | face_ISOV         | **2.65** |
+   |                | forehead          | 4.67     |
+   |                | left_ear          | 5.79     |
+   |                | left_eyebrow      | 11.72    |
+   |                | left_eye          | 12.02    |
+   |                | left_middle_face  | 2.43     |
+   |                | mouth             | 7.05     |
+   |                | nose              | 3.77     |
+   |                | right_ear         | 7.13     |
+   |                | right_eyebrow     | 11.35    |
+   |                | right_eye         | 10.94    |
+   |                | right_middle_face | 4.18     |
+   |                |                   |          |
+   |                | normalized        | 0.00     |
+
+   
+
+6. #function03 **DONE** ~~APCER and BPCER~~ & ~~DET curve (**urgent, confused**)~~
 
    about how to get the DET curve:
 
@@ -147,13 +202,15 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
 
    ![img](./results/plots/face_regions_det_numf1.png)
 
-7. #other01 ~~deploy the experiment in DTU clusters~~
+7. #other01  **DONE** ~~deploy the experiment in DTU clusters~~
 
 8. #trails02 other datasets 
 
    face alignment & region extraction has done, training needs to be done
 
-9. #function04 need to get EER (with certain number) and make a chart
+9. #function04  **DONE** ~~need to get EER (with certain number) and make a chart~~ 
+
+   
 
 
 

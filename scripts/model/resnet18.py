@@ -201,7 +201,7 @@ if __name__ == '__main__':
 
                 # props_ = softmax(out)
                 props.append(softmax(out.cpu()))
-                labels_rec.append(label.cpu().numpy())
+                labels_rec.append(label.cpu().numpy()[0])
 
             print('epoch:{}\ttest accuracy:{}\t loss:{}'.format(epoch,correct / total,total_loss))
             print('APCER:{:.4f}\tBPCER:{:.4f}'.format(apce/ap_total,bpce/bp_total))

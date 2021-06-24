@@ -340,7 +340,7 @@ class DET:
     """
 
     def __init__(self, biometric_evaluation_type=None, abbreviate_axes=False, plot_title=None,
-                 plot_eer_line=False, plot_rule_of_30=False, cleanup_segments_distance=0.01):
+                 plot_eer_line=False, plot_rule_of_30=False, cleanup_segments_distance=0.01,figsize=None):
         self.num_systems = 0
         self.system_labels = []
         self.axes_transform = probit
@@ -355,6 +355,8 @@ class DET:
         self.x_ticklabels = numpy.array(['0.00001', '0.0001', '0.001', '0.01', '0.1', '1', '5', '20', '40', '65', '85', '95'])
         self.y_ticks = numpy.array([1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 5e-2, 20e-2, 40e-2, 65e-2, 85e-2, 95e-2])
         self.y_ticklabels = numpy.array(['0.00001', '0.0001', '0.001', '0.01', '0.1', '1', '5', '20', '40', '65', '85', '95'])
+
+        self.figsize = figsize
 
         if biometric_evaluation_type == 'algorithm':
             if abbreviate_axes:
@@ -394,7 +396,7 @@ class DET:
         """
         Creates empty DET plot figure
         """
-        self.figure = mpl.figure()
+        self.figure = mpl.figure(figsize=self.figsize)
         ax = self.figure.add_subplot(111)
         ax.set_aspect('equal')
 

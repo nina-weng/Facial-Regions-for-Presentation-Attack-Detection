@@ -141,7 +141,7 @@ if __name__ == '__main__':
     test_data = frame_based_CASIA_dataset_fusion(test_txt_list, 256, transform_test)
 
     # record file path
-    rec_fpath = args.rec_dir + '/' +'fusion_'+ '_'.join(chosen_face_regions) + '_' + datetime.now().strftime('%Y%m%d%H%M%S') + '.txt'
+    rec_fpath = args.rec_dir + '/' +'fusion_'+ '-'.join(chosen_face_regions) + '_' + datetime.now().strftime('%Y%m%d%H%M%S') + '.txt'
     f = open(rec_fpath, "a")
     f.write('ARGS:{}\n'.format(args))
     f.close()
@@ -240,7 +240,7 @@ if __name__ == '__main__':
 
                 # props_ = softmax(out)
                 props.append(softmax(out.cpu()))
-                labels_rec.append(label.cpu().numpy())
+                labels_rec.append(label.cpu().numpy()[0])
 
             print('epoch:{}\ttest accuracy:{}\t loss:{}'.format(epoch,correct / total,total_loss))
             print('APCER:{:.4f}\tBPCER:{:.4f}'.format(apce/ap_total,bpce/bp_total))
