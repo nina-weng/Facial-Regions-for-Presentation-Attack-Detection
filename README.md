@@ -208,6 +208,57 @@ There are 50 subjects in this dataset. For each subject, there are 12 videos wit
 
    face alignment & region extraction has done, training needs to be done
 
+   DATASET： RM
+
+   **single region**
+
+   | region            | EER (%)  | test_accu |
+   | ----------------- | -------- | --------- |
+   | both_eyebrows     | **0.75** | 0.975524  |
+   | both_eyes         | **0.75** | 0.98951   |
+   | chin              | 7.38     | 0.91958   |
+   | face_IOSV         | **0.00** | 1.00      |
+   | forehead          | 2.80     | 0.975524  |
+   | left_ear          | 2.80     | 0.9440    |
+   | left_eyebrow      | 5.33     | 0.947552  |
+   | left_eye          | 2.80     | 0.9720    |
+   | left_middle_face  | 1.78     | 0.979021  |
+   | mouth             | 1.78     | 0.98951   |
+   | nose              | 1.50     | 0.975524  |
+   | right_ear         | 2.80     | 0.965035  |
+   | right_eyebrow     | **0.75** | 0.993007  |
+   | right_eye         | **0.75** | 0.993007  |
+   | right_middle_face | **0.00** | 1.00      |
+   |                   |          |           |
+   | normalized        | 0.00     | 1.00      |
+
+   right side face works better, does this related to the attack setting (lights direction from left to right for example)
+
+   **2 region fusion**
+
+   % parser.add_argument('--data-source',default='rm',choices=['numf1','numf5','rm'],help='the source of data, txt file belonged folder')
+
+   | domain regions | added region      | EER      | test_accu |
+   | -------------- | ----------------- | -------- | --------- |
+   | both_eyebrows  | -                 | 0.75     | 0.975524  |
+   |                | both_eyes         | 0.75     | 0.975524  |
+   |                | chin              | 1.78     | 0.958042  |
+   |                | face_ISOV         | 0.00     | 0.996503  |
+   |                | forehead          | **0.00** | 0.996503  |
+   |                | left_ear          | 0.75     | 0.98951   |
+   |                | left_eyebrow      | 1.78     | 0.972028  |
+   |                | left_eye          | 1.78     | 0.972028  |
+   |                | left_middle_face  | 0.75     | 0.996503  |
+   |                | mouth             | **0.00** | 0.996503  |
+   |                | nose              | 0.75     | 0.979021  |
+   |                | right_ear         | 0.75     | 0.993007  |
+   |                | right_eyebrow     | 0.75     | 0.972028  |
+   |                | right_eye         | 1.78     | 0.986014  |
+   |                | right_middle_face | 0.00     | 0.996503  |
+   |                |                   |          |           |
+
+   
+
 9. #function04  **DONE** ~~need to get EER (with certain number) and make a chart~~ 
 
    

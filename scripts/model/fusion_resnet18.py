@@ -17,13 +17,13 @@ import os
 
 parser = argparse.ArgumentParser(description='Training with feature-level-fusion resnet18. \
 Dataset frame-based Casia-Face-AntiSpoofing PAD.')
-parser.add_argument('--train-batch', default=4, type=int,
+parser.add_argument('--train-batch', default=2, type=int,
                     help="train batch size")
 parser.add_argument('--test-batch', default=1, type=int,
                     help="test batch size")
 parser.add_argument('--size', default='256', choices=['154','140','256','192','combine'])
 parser.add_argument('--seed', type=int, default=1, help="manual seed")
-parser.add_argument('--num-epochs', type=int, default=10, help="number of epochs")
+parser.add_argument('--num-epochs', type=int, default=1, help="number of epochs")
 parser.add_argument('--lr', '--learning-rate', default=1e-4, type=float,
                     help="initial learning rate, use 0.0001 for rnn, use 0.0003 for pooling and attention")
 parser.add_argument('--rec-dir', default='../../results/scores_rec/region_fusion', type=str,
@@ -31,6 +31,7 @@ parser.add_argument('--rec-dir', default='../../results/scores_rec/region_fusion
 parser.add_argument('--face-regions', default='[forehead,face_ISOV]', type=str,
                     help="list-like string, the list of face regions")
 parser.add_argument('--gpu-devices', default='0', type=str, help='gpu device ids for CUDA_VISIBLE_DEVICES')
+parser.add_argument('--data-source',default='numf1',choices=['numf1','numf5','rm'],help='the source of data, txt file belonged folder')
 args = parser.parse_args()
 
 
@@ -96,6 +97,17 @@ class frame_based_CASIA_dataset_fusion(Dataset):
         return len(self.imgs_collection[0])
 
 
+
+saved_feature=[]
+
+def save_feature(name):
+    def hook(module, input, output):
+        #print(len(input),input[0].shape)
+        saved_feature.append(input[0].detach().cpu().numpy())
+    return hook
+
+
+
 if __name__ == '__main__':
     print('Training with feature-level-fusion resnet18')
 
@@ -134,8 +146,8 @@ if __name__ == '__main__':
     print('Chosen face regions:{}'.format(chosen_face_regions))
     num_of_fusion_regions = len(chosen_face_regions)
 
-    train_txt_list = [ '../../train_test_info/numf5/train_' + fr + '_20_1.txt' for fr in chosen_face_regions]
-    test_txt_list = [ '../../train_test_info/numf5/test_' + fr + '_30_1.txt' for fr in chosen_face_regions]
+    train_txt_list = [ '../../train_test_info/'+args.data_source+'/train_' + fr + '_20_1.txt' for fr in chosen_face_regions]
+    test_txt_list = [ '../../train_test_info/'+args.data_source+'/test_' + fr + '_30_1.txt' for fr in chosen_face_regions]
 
     train_data = frame_based_CASIA_dataset_fusion(train_txt_list, 256, transform_train)
     test_data = frame_based_CASIA_dataset_fusion(test_txt_list, 256, transform_test)
@@ -203,6 +215,12 @@ if __name__ == '__main__':
         # test
         with torch.no_grad():
             net.eval()
+
+
+            if epoch == (args.num_epochs -1):
+                for i in range(num_of_fusion_regions):
+                    net.net_list[i].avgpool.register_forward_hook(save_feature('avgpool'))
+
             total = 0
             total_loss = 0
             correct = 0
@@ -253,9 +271,13 @@ if __name__ == '__main__':
             for i in range(resize_props_.shape[0]):
                 f.write('{},{},{}\n'.format(resize_props_[i,0],resize_props_[i,1],labels_rec[i]))
             # record the train loss & test loss
-            f.write('train accuracy:{:.6ff}\ttrain loss:{:.6f}\n'.format(train_accu,train_loss))
+            f.write('train accuracy:{:.6f}\ttrain loss:{:.6f}\n'.format(train_accu,train_loss))
             f.write('test accuracy:{:.6f}\ttest loss:{:.6f}\n'.format(correct / total,total_loss))
             f.write('APCER:{:.4f}\tBPCER:{:.4f}\n'.format(apce/ap_total,bpce/bp_total))
             f.close()
 
-
+        if epoch == (args.num_epochs - 1):
+            # store the feature map
+            fm_dir_path = '../../results/feature_maps/'+args.rec_dir.split('/')[-1]
+            fname = rec_fpath.split('/')[-1].split('.txt')[0] + '.npy'
+            np.save(os.path.join(fm_dir_path,fname), np.array(saved_feature),allow_pickle=True)

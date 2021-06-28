@@ -1,1 +1,0 @@
-ARGS:Namespace(data_source='rm', face_region='normalized', gpu_devices='0', lr=0.0001, num_epochs=10, rec_dir='../../results/scores_rec/rm', seed=1, size='256', test_batch=1, train_batch=32)

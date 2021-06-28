@@ -71,8 +71,8 @@ def get_eer(fmr, fnmr):
     return (fnmr[t2] + fmr[t2]) / 2
 
 
-def choose_epoch(str_list,criteria='test_loss'):
-    num_epoch_exam = len(str_list[2:])
+def choose_epoch(str_list,criteria='train_loss'):
+    num_epoch_exam = len(str_list[3:])
     print('number of epochs need exam:{}'.format(num_epoch_exam))
 
     # epoch info
@@ -83,7 +83,9 @@ def choose_epoch(str_list,criteria='test_loss'):
     APCER = np.zeros(num_epoch_exam)
     BPCER = np.zeros(num_epoch_exam)
 
-    for idx,epoch_str in enumerate(str_list[2:]):
+    for idx,epoch_str in enumerate(str_list[3:]):
+        if len(epoch_str.split('train accuracy:')) <2:
+            print(epoch_str)
         test_data = epoch_str.split('train accuracy:')[0]
         epoch_info = epoch_str.split('train accuracy:')[1]
 
@@ -126,7 +128,7 @@ def read_tar_non(txt_fpath,file_type='single'):
 
     epochs_data = txt_data.split('epoch')
 
-    if file_type=='fusion':
+    if file_type=='fusion' or file_type=='rm_single' or file_type == 'rm_fusion':
         chosen_epoch = choose_epoch(epochs_data)
     else:
         chosen_epoch = epochs_data[-1]
@@ -152,14 +154,18 @@ def read_tar_non(txt_fpath,file_type='single'):
 
 
 if __name__ == '__main__':
-    file_type = 'fusion'
-    NUM_RF = 3
+    file_type = 'rm_single'
+    NUM_RF = None
 
 
     if file_type == 'single':
         scores_rec_dir = '../../results/scores_rec/single_region'
     elif file_type == 'fusion':
         scores_rec_dir = '../../results/scores_rec/region_fusion'
+    elif file_type == 'rm_single':
+        scores_rec_dir = '../../results/scores_rec/rm_single'
+    elif   file_type == 'rm_fusion':
+        scores_rec_dir = '../../results/scores_rec/rm_fusion'
     else:
         raise Exception('file type {} not implemented'.format(file_type))
 
@@ -169,26 +175,30 @@ if __name__ == '__main__':
 
     for fname in os.listdir(scores_rec_dir):
         # print(fname.split('202106')[1])
-        if fname.split('202106')[1][:2] == '23' or fname.split('202106')[1][:2] == '24':
+        if fname.split('202106')[1][0] == '2':
             # print(fname)
-            if file_type == 'single':
+            if file_type == 'single' or file_type == 'rm_single':
                 fr_name = fname.split('_2021')[0]
-            elif file_type == 'fusion':
+            elif file_type == 'fusion' or file_type == 'rm_fusion':
                 fr_name = fname.split('_2021')[0].split('fusion_')[1]
                 num_fr = len(fr_name.split('-'))
                 if NUM_RF!= None:
                     if NUM_RF != num_fr:
                         continue
 
+
             print('*****************\nprocessing {}'.format(fname))
-            face_regions.append(fr_name)
+
             tar,non = read_tar_non(os.path.join(scores_rec_dir,fname),file_type=file_type)
-            tars.append(tar)
-            nons.append(non)
             # calculate the EER
             thresholds, apcer, bpcer = calculate_roc(tar, non)
             eer = get_eer(apcer, bpcer)*100
             print('EER for region {}:{:.2f}%'.format(fr_name,eer))
+
+            if eer != 0:
+                face_regions.append(fr_name)
+                tars.append(tar)
+                nons.append(non)
 
 
     print('includes {} region result'.format(len(face_regions)))

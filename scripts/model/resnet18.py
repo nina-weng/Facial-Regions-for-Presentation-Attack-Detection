@@ -18,16 +18,16 @@ import os
 
 
 parser = argparse.ArgumentParser(description='train resnet18 model with frame-based CASIA PAD')
-parser.add_argument('--train-batch', default=32, type=int,
+parser.add_argument('--train-batch', default=4, type=int,
                     help="train batch size")
 parser.add_argument('--test-batch', default=1, type=int,
                     help="test batch size")
 parser.add_argument('--size', default='256', choices=['154','140','256','192','combine'])
 parser.add_argument('--seed', type=int, default=1, help="manual seed")
-parser.add_argument('--num-epochs', type=int, default=10, help="number of epochs")
+parser.add_argument('--num-epochs', type=int, default=1, help="number of epochs")
 parser.add_argument('--lr', '--learning-rate', default=1e-4, type=float,
                     help="initial learning rate, use 0.0001 for rnn, use 0.0003 for pooling and attention")
-parser.add_argument('--rec-dir', default='../../results/scores_rec/rm', type=str,
+parser.add_argument('--rec-dir', default='../../results/scores_rec/rm_single', type=str,
                     help="score recording file path dir")
 parser.add_argument('--face-region', default='normalized', type=str,
                     help="chosen face region")
@@ -62,6 +62,15 @@ class frame_based_CASIA_dataset(Dataset):
 
     def __len__(self):
         return len(self.imgs)
+
+# gload variable
+saved_feature = []
+
+def save_feature(name):
+    def hook(module,input,output):
+        print(len(input),input[0].shape)
+        saved_feature.append(input[0].detach().cpu().numpy())
+    return hook
 
 
 if __name__ == '__main__':
@@ -137,6 +146,7 @@ if __name__ == '__main__':
         # train
         net.train()
         print('number of batch:{}'.format(len(dataloader_train)))
+
         for id, item in tqdm(enumerate(dataloader_train)):
             data, label = item
 
@@ -166,6 +176,11 @@ if __name__ == '__main__':
         # test
         with torch.no_grad():
             net.eval()
+
+            if epoch == (args.num_epochs - 1):
+                # register hook
+                net.avgpool.register_forward_hook(save_feature('avgpool'))
+
             total = 0
             total_loss = 0
             correct = 0
@@ -204,6 +219,7 @@ if __name__ == '__main__':
                 props.append(softmax(out.cpu()))
                 labels_rec.append(label.cpu().numpy()[0])
 
+
             print('epoch:{}\ttest accuracy:{}\t loss:{}'.format(epoch,correct / total,total_loss))
             print('APCER:{:.4f}\tBPCER:{:.4f}'.format(apce/ap_total,bpce/bp_total))
 
@@ -215,6 +231,14 @@ if __name__ == '__main__':
             for i in range(resize_props_.shape[0]):
                 f.write('{},{},{}\n'.format(resize_props_[i,0],resize_props_[i,1],labels_rec[i]))
             f.close()
+
+        if epoch == (args.num_epochs - 1):
+            # store the feature map
+            fm_dir_path = '../../results/feature_maps/'+args.rec_dir.split('/')[-1]
+            fname = rec_fpath.split('/')[-1].split('.txt')[0] + '.npy'
+            np.save(os.path.join(fm_dir_path,fname), np.array(saved_feature),allow_pickle=True)
+            # how to load
+            # d = np.load('test3.npy')
 
 
 

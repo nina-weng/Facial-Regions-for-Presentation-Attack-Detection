@@ -183,7 +183,13 @@ if __name__ == '__main__':
 
                 if isDetected:
                     for region_type_chosen in FACE_REGIONS_INFO.keys():
-                        region_subject_video_dir = os.path.join(face_regions_dir, region_type_chosen,ap_bp_types)
+                        if region_type_chosen == 'left_middle_face':
+                            region_subject_video_dir = os.path.join(face_regions_dir, 'lmf', ap_bp_types)
+                        elif region_type_chosen == 'right_middle_face':
+                            region_subject_video_dir = os.path.join(face_regions_dir, 'rmf', ap_bp_types)
+                        else:
+                            region_subject_video_dir = os.path.join(face_regions_dir, region_type_chosen,ap_bp_types)
+                            continue
                         region_img = extract_region(region_type_chosen, img, landmarks)
                         # cv2.imshow('',region_img)
                         # cv2.waitKey()

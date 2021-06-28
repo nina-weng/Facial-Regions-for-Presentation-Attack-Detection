@@ -189,7 +189,7 @@ if __name__ == '__main__':
 
     face_region_dir = '../../../../RM/train_face_region/'
 
-    txt_dir = '../../train_test_info/rm/'
+    txt_dir = '../../train_test_info/rm_single/'
     train_chosenid_path = txt_dir+'/train_chosen_id_rm.txt'
     test_chosenid_path = txt_dir + '/test_chosen_id_rm.txt'
 
